@@ -1,11 +1,82 @@
+import React, { useState } from 'react';
+import Router from 'next/router';
+import Link from 'next/link';
 import Layout from '@/layout/layout';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { Button, Stack, Typography } from '@mui/material';
-import Link from 'next/link';
+
+interface SignUpFormData {
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
 
 const Register: React.FC = () => {
+	const [formState, setFormState] = useState<SignUpFormData>({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+	const [loading, setLoading] = useState(false);
+
+	const handleChange = (field: keyof SignUpFormData) => (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setFormState({
+      ...formState,
+      [field]: event.target.value,
+    });
+  };
+
+	const signupHandler = async () => {
+		try {
+			setLoading(true);
+
+			if (formState.password !== formState.confirmPassword) {
+				return;
+			}
+
+			const bodyFormData = new FormData();
+			bodyFormData.append('email', formState.email);
+			bodyFormData.append('password', formState.password);
+			bodyFormData.append('name', formState.username);
+
+			const response = await fetch('http://localhost:8000/api/user/create', {
+				method: 'POST',
+				body: bodyFormData,
+			});
+
+			if (!response.ok) {
+				const resData = await response.json();
+				if (response.status === 401 || response.status === 422) {
+					console.log(resData.message);
+					throw new Error('Validation failed.');
+				} else {
+					console.log('Error!');
+					throw new Error('Creating a user failed!');
+				}
+			}
+
+			const resData = await response.json();
+			// Assuming that `login` and `Router` are available in your context
+			// Update this part based on your actual implementation
+			// this.props.dispatch(login(resData.user));
+			localStorage.setItem('token', resData.token);
+			const remainingMilliseconds = 60 * 60 * 1000;
+			const expiryDate = new Date(new Date().getTime() + remainingMilliseconds);
+			localStorage.setItem('expiryDate', expiryDate.toISOString());
+			Router.push('/home');
+		} catch (err) {
+			console.error(err);
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	return (
 		<Layout>
 			<Container maxWidth="sm">
@@ -64,6 +135,8 @@ const Register: React.FC = () => {
 							label="Username..."
 							variant="outlined"
 							required
+							onChange={handleChange('username')}
+							value={formState.username}
 							sx={{ borderRadius: 0, opacity: 0.5 }}
 						/>
 						<TextField
@@ -71,20 +144,29 @@ const Register: React.FC = () => {
 							label="Email Address..."
 							variant="outlined"
 							required
+							type="email"
+							onChange={handleChange('email')}
+							value={formState.email}
 							sx={{ borderRadius: 0, opacity: 0.5 }}
 						/>
 						<TextField
 							id="standard-basic"
 							label="Password..."
 							variant="outlined"
+							type="password"
 							required
+							onChange={handleChange('password')}
+							value={formState.password}
 							sx={{ borderRadius: 0, opacity: 0.5 }}
 						/>
 						<TextField
 							id="standard-basic"
 							label="Confirm Password..."
 							variant="outlined"
+							type="password"
 							required
+							onChange={handleChange('confirmPassword')}
+							value={formState.confirmPassword}
 							sx={{ borderRadius: 0, opacity: 0.5 }}
 						/>
 					</Stack>
@@ -97,6 +179,8 @@ const Register: React.FC = () => {
 							display: 'block',
 							margin: '0 auto',
 						}}
+						type="submit"
+						onClick={signupHandler}
 					>
 						Register
 					</Button>
