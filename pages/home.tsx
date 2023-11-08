@@ -113,7 +113,6 @@ const Home: React.FC = () => {
       })
       .then((data) => {
         const chunkedArray: Course[][] = chunkArray(data.courses, 6);
-        console.log(data.courses[0]);
         setCourses(chunkedArray);
       });
   }, []);
