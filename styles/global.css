@@ -47,3 +47,7 @@ img {
   flex-direction: column;
   justify-content: center;
 }
+
+.react-multiple-carousel__arrow {
+  background-color: #8338ec !important;
+}
