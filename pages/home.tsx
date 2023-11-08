@@ -13,22 +13,23 @@ import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
-interface Item {
-  img: string;
+interface Course {
+  imageUrl: string;
   title: string;
   author: string;
-  rows?: number;
-  cols?: number;
+  playlistId: string;
+  description: string;
   featured?: boolean;
 }
 
 interface TitlebarImageListProps {
-  data: Item[];
+  data: Course[];
   listIndex: number;
+  length: number;
   setNext(index: number): void;
 }
 
-const TitlebarImageList: React.FC<TitlebarImageListProps> = ({ data, listIndex, setNext }) => {
+const TitlebarImageList: React.FC<TitlebarImageListProps> = ({ data, listIndex, length, setNext }) => {
   const [transitionDirection, setTransitionDirection] = useState<'left' | 'right' | null>(null);
 
   useEffect(() => {
@@ -59,9 +60,9 @@ const TitlebarImageList: React.FC<TitlebarImageListProps> = ({ data, listIndex, 
       </IconButton>}
       <ImageList cols={6} gap={10} className={`home_imageList`}>
         {data.map((item) => (
-          <ImageListItem key={item.img}>
+          <ImageListItem key={item.imageUrl}>
             <img
-              src={`${item.img}?w=248&fit=crop&auto=format`}
+              src={`${item.imageUrl}?w=248&fit=crop&auto=format`}
               alt={item.title}
               width={"248px"}
               loading="lazy"
@@ -81,7 +82,7 @@ const TitlebarImageList: React.FC<TitlebarImageListProps> = ({ data, listIndex, 
           </ImageListItem>
         ))}
       </ImageList>
-      {listsData.length > 0 && listIndex !== listsData.length-1 && <IconButton
+      {length > 0 && listIndex !== length-1 && <IconButton
         color="inherit"
         onClick={() => handleSetNext('right')}
         className={"imageList_rightIcon"}
@@ -92,94 +93,40 @@ const TitlebarImageList: React.FC<TitlebarImageListProps> = ({ data, listIndex, 
   );
 };
 
-const itemData = [
-  {
-    img: 'https://itsg-global.com/wp-content/uploads/2016/09/react-js-to-use-or-not-to-use.png',
-    title: 'React JS',
-    author: 'Beginner Level',
-    rows: 2,
-    cols: 2,
-    featured: true,
-  },
-  {
-    img: 'https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/032016/untitled-1_308.png?itok=zKSyD0i9',
-    title: 'Angular JS',
-    author: 'Intermediate Level',
-  },
-  {
-    img: 'https://colorlib.com/wp/wp-content/uploads/sites/2/node.js-logo.png',
-    title: 'Node Js',
-    author: 'Beginner Level',
-  },
-  {
-    img: 'https://i.pinimg.com/originals/d4/74/7c/d4747cb7dcbecb5223b83355ea97a3be.png',
-    title: 'AWS',
-    author: 'Expert Level',
-    cols: 2,
-  },
-  {
-    img: 'https://wallpapercave.com/wp/wp8042506.jpg',
-    title: 'Python',
-    author: 'Beginner Level',
-    cols: 2,
-  },
-  {
-    img: 'https://miro.medium.com/v2/resize:fit:1400/1*JKGCmCLDI4wrIJXHUhEACg.png',
-    title: 'Docker',
-    author: 'Expert Level',
-    rows: 2,
-    cols: 2,
-    featured: true,
-  }
-]
-const itemDataTwo = [{
-    img: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
-    title: 'Basketball',
-    author: '@tjdragotta',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
-    title: 'Fern',
-    author: '@katie_wasserman',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
-    title: 'Mushrooms',
-    author: '@silverdalex',
-    rows: 2,
-    cols: 2,
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af',
-    title: 'Tomato basil',
-    author: '@shelleypauls',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
-    title: 'Sea star',
-    author: '@peterlaster',
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
-    title: 'Bike',
-    author: '@southside_customs',
-    cols: 2,
-  },
-];
-
-const listsData: Item[][] = [
-  itemData,
-  itemDataTwo,
-];
-
 const Home: React.FC = () => {
   const [currentlyVisible, setCurrentlyVisible] = React.useState<number>(0);
+  const [courses, setCourses] = React.useState<Course[][]>([]);
+
+  function chunkArray<Course>(array: Course[], chunkSize: number): Course[][] {
+    const result: Course[][] = [];
+    for (let i = 0; i < array.length; i += chunkSize) {
+      result.push(array.slice(i, i + chunkSize));
+    }
+    return result;
+  }
+
+  useEffect(() => {
+    fetch("http://localhost:8000/api/course/courses")
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        const chunkedArray: Course[][] = chunkArray(data.courses, 6);
+        setCourses(chunkedArray);
+      });
+  }, []);
 
   return (
     <Layout>
       <div className="margin-md">
-        {listsData.map((listData, index) => (
-          index===currentlyVisible && <TitlebarImageList key={index} data={listData} listIndex={index} setNext={setCurrentlyVisible}/>
+        {courses.map((listData, index) => (
+          index===currentlyVisible && <TitlebarImageList 
+            key={index} 
+            data={listData} 
+            listIndex={index}
+            length={courses.length}
+            setNext={setCurrentlyVisible}
+          />
         ))}
 
       </div>
