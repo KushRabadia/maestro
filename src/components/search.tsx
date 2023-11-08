@@ -56,13 +56,18 @@ const SearchBar: React.FC<SearchProps> = (props) => {
   const { placeholder, onChange, value, inputProps } = props;
 
   return (
-    <StyledInputBase
-      placeholder={placeholder}
-      onChange={onChange}
-      value={value}
-      inputProps={inputProps}
-      // Other props
-    />
+    <Search>
+      <SearchIconWrapper>
+        <SearchIcon />
+      </SearchIconWrapper>
+      <StyledInputBase
+        placeholder={placeholder}
+        onChange={onChange}
+        value={value}
+        inputProps={inputProps}
+        // Other props
+      />
+    </Search>
   );
 };
 
