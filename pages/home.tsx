@@ -14,6 +14,7 @@ import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 interface Course {
+  _id: string;
   imageUrl: string;
   title: string;
   author: string;
@@ -59,23 +60,23 @@ const TitlebarImageList: React.FC<TitlebarImageListProps> = ({ data, listIndex, 
         <ArrowCircleLeftIcon fontSize='large'/>
       </IconButton>}
       <ImageList cols={6} gap={10} className={`home_imageList`}>
-        {data.map((item) => (
-          <ImageListItem key={item.imageUrl}>
+        {data.map((course) => (
+          <ImageListItem key={course._id}>
             <img
-              src={`${item.imageUrl}?w=248&fit=crop&auto=format`}
-              alt={item.title}
+              src={`${course.imageUrl}?w=248&fit=crop&auto=format`}
+              alt={course.title}
               width={"248px"}
               loading="lazy"
             />
             <ImageListItemBar
-              title={item.title}
-              subtitle={item.author}
+              title={course.title}
+              subtitle={course.author}
               actionIcon={
                 <IconButton
                   sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                  aria-label={`info about ${item.title}`}
+                  aria-label={`info about ${course.title}`}
                 >
-                  <Link href="/course" className='text-link'><ArrowForwardIcon /></Link>
+                  <Link href={`/course/${course._id}`} className='text-link'><ArrowForwardIcon /></Link>
                 </IconButton>
               }
             />
@@ -112,6 +113,7 @@ const Home: React.FC = () => {
       })
       .then((data) => {
         const chunkedArray: Course[][] = chunkArray(data.courses, 6);
+        console.log(data.courses[0]);
         setCourses(chunkedArray);
       });
   }, []);
