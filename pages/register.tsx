@@ -9,97 +9,65 @@ const Register: React.FC = () => {
 	return (
 		<Layout>
 			<Container maxWidth="sm">
-				<Box
-					sx={{
-						display: 'flex',
-						flexDirection: 'row',
-						position: 'relative',
-						marginTop: 10,
-						justifyContent: 'center',
-						maxWidth: 'auto',
-						fontSize: 20,
-						gap: 5,
-					}}
-				>
+				<Box className={'register_boxLayout'}>
 					<Link href="/login">
 						<Button
+							className={'register_pageButton'}
 							sx={{
-								fontSize: 20,
-								textTransform: 'none',
-								fontWeight: 'bold',
-								opacity: 0.75,
+								opacity: 0.5,
 							}}
 						>
 							Login
 						</Button>
 					</Link>
 					<Link href="/register">
-						<Button
-							sx={{
-								fontSize: 20,
-								textTransform: 'none',
-								fontWeight: 'bold',
-							}}
-						>
+						<Button className={'register_pageButton'}>
 							Register
 						</Button>
 					</Link>
 				</Box>
 
-				<Container
-					maxWidth="sm"
-					sx={{
-						marginTop: 5,
-						boxShadow: 3,
-						borderRadius: 5,
-						padding: 5,
-						display: 'flex',
-						flexDirection: 'column',
-					}}
-				>
+				<Container maxWidth="sm" className="register_containerLayout">
 					<Stack gap={4}>
-						<Typography variant="h6">Create Your Account</Typography>
+						<Typography variant="h6">
+							Create Your Account
+						</Typography>
 						<TextField
 							id="standard-basic"
-							label="Username..."
+							label="Username"
 							variant="outlined"
 							required
-							sx={{ borderRadius: 0, opacity: 0.5 }}
+							className="register_textField"
 						/>
 						<TextField
 							id="standard-basic"
-							label="Email Address..."
+							label="Email Address"
 							variant="outlined"
 							required
-							sx={{ borderRadius: 0, opacity: 0.5 }}
+							className="register_textField"
 						/>
 						<TextField
 							id="standard-basic"
-							label="Password..."
+							label="Password"
 							variant="outlined"
 							required
-							sx={{ borderRadius: 0, opacity: 0.5 }}
+							className="register_textField"
 						/>
 						<TextField
 							id="standard-basic"
-							label="Confirm Password..."
+							label="Confirm Password"
 							variant="outlined"
 							required
-							sx={{ borderRadius: 0, opacity: 0.5 }}
+							className="register_textField"
 						/>
-					</Stack>
 
-					<Button
-						variant="contained"
-						sx={{
-							textTransform: 'none',
-							fontWeight: 'bold',
-							display: 'block',
-							margin: '0 auto',
-						}}
-					>
-						Register
-					</Button>
+						<Button
+							variant="contained"
+							className="register_dataButton"
+						>
+							Register
+						</Button>
+					</Stack>
 				</Container>
 			</Container>
 		</Layout>
