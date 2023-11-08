@@ -1,17 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import Box from '@mui/material/Box';
-import Link from 'next/link';
-import Layout from '../src/layout/layout';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
-import ListSubheader from '@mui/material/ListSubheader';
-import IconButton from '@mui/material/IconButton';
-import InfoIcon from '@mui/icons-material/Info';
-import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
-import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import IconButton from "@mui/material/IconButton";
+import ImageListItem from "@mui/material/ImageListItem";
+import ImageListItemBar from "@mui/material/ImageListItemBar";
+import Link from "@mui/material/Link";
+import React, { useEffect } from "react";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+import Layout from "../src/layout/layout";
 
 interface Course {
   _id: string;
@@ -25,71 +20,89 @@ interface Course {
 
 interface TitlebarImageListProps {
   data: Course[];
-  listIndex: number;
-  length: number;
-  setNext(index: number): void;
 }
 
-const TitlebarImageList: React.FC<TitlebarImageListProps> = ({ data, listIndex, length, setNext }) => {
-  const [transitionDirection, setTransitionDirection] = useState<'left' | 'right' | null>(null);
-
-  useEffect(() => {
-    // Reset transition direction after the transition ends
-    const transitionEndHandler = () => setTransitionDirection(null);
-    const imageList = document.querySelector('.home_imageList') as HTMLElement;
-    imageList.addEventListener('transitionend', transitionEndHandler);
-
-    return () => {
-      imageList.removeEventListener('transitionend', transitionEndHandler);
-    };
-  }, [transitionDirection]);
-
-  const handleSetNext = (direction: 'left' | 'right') => {
-    setTransitionDirection(direction);
-    setNext(direction === 'left' ? listIndex - 1 : listIndex + 1);
-  };
+const TitlebarImageList: React.FC<TitlebarImageListProps> = ({ data }) => {
   return (
-    <div 
-      className={`imageListContainer ${transitionDirection} flexRowCenter`}
-    >
-      {listIndex>0 && <IconButton
-        color="inherit"
-        onClick={() => handleSetNext('left')}
-        className={"imageList_leftIcon"}
+    <div className="imageListContainer flexRowCenter">
+      <Carousel
+        additionalTransfrom={0}
+        arrows
+        centerMode={false}
+        containerClass="container"
+        draggable
+        focusOnSelect={false}
+        infinite={false}
+        keyBoardControl
+        minimumTouchDrag={80}
+        pauseOnHover
+        renderArrowsWhenDisabled={false}
+        renderButtonGroupOutside={false}
+        renderDotsOutside={false}
+        responsive={{
+          desktop: {
+            breakpoint: {
+              max: 3000,
+              min: 1024,
+            },
+            items: 5,
+            partialVisibilityGutter: 64,
+          },
+          mobile: {
+            breakpoint: {
+              max: 464,
+              min: 0,
+            },
+            items: 1,
+            partialVisibilityGutter: 30,
+          },
+          tablet: {
+            breakpoint: {
+              max: 1024,
+              min: 464,
+            },
+            items: 2,
+            partialVisibilityGutter: 30,
+          },
+        }}
+        rewind={false}
+        rewindWithAnimation={false}
+        rtl={false}
+        shouldResetAutoplay
+        showDots={false}
+        sliderClass=""
+        slidesToSlide={1}
+        swipeable
       >
-        <ArrowCircleLeftIcon fontSize='large'/>
-      </IconButton>}
-      <ImageList cols={6} gap={10} className={`home_imageList`}>
-        {data.map((course) => (
-          <ImageListItem key={course._id}>
-            <img
-              src={`${course.imageUrl}?w=248&fit=crop&auto=format`}
-              alt={course.title}
-              width={"248px"}
-              loading="lazy"
-            />
-            <ImageListItemBar
-              title={course.title}
-              subtitle={course.author}
-              actionIcon={
-                <IconButton
-                  sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                  aria-label={`info about ${course.title}`}
-                >
-                  <Link href={`/course/${course._id}`} className='text-link'><ArrowForwardIcon /></Link>
-                </IconButton>
-              }
-            />
-          </ImageListItem>
+        {data.map((course, index) => (
+          <div key={index}>
+            <ImageListItem key={course._id} className="margin-sm">
+              <img
+                src={`${course.imageUrl}?fit=crop&auto=format`}
+                alt={course.title}
+                loading="lazy"
+                className="card"
+                style={{ width: "100%", height: "217px" }}
+              />
+
+              <ImageListItemBar
+                title={course.title}
+                subtitle={course.author}
+                actionIcon={
+                  <IconButton
+                    sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+                    aria-label={`info about ${course.title}`}
+                  >
+                    <Link href={`/course/${course._id}`} className="text-link">
+                      <ArrowForwardIcon />
+                    </Link>
+                  </IconButton>
+                }
+              />
+            </ImageListItem>
+          </div>
         ))}
-      </ImageList>
-      {length > 0 && listIndex !== length-1 && <IconButton
-        color="inherit"
-        onClick={() => handleSetNext('right')}
-        className={"imageList_rightIcon"}
-      >
-        <ArrowCircleRightIcon fontSize='large'/>
-      </IconButton>}
+      </Carousel>
     </div>
   );
 };
@@ -120,16 +133,12 @@ const Home: React.FC = () => {
   return (
     <Layout>
       <div className="margin-md">
-        {courses.map((listData, index) => (
-          index===currentlyVisible && <TitlebarImageList 
-            key={index} 
-            data={listData} 
-            listIndex={index}
-            length={courses.length}
-            setNext={setCurrentlyVisible}
-          />
-        ))}
-
+        {courses.map(
+          (listData, index) =>
+            index === currentlyVisible && (
+              <TitlebarImageList key={index} data={listData} />
+            )
+        )}
       </div>
     </Layout>
   );
