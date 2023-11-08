@@ -42,7 +42,7 @@ const MediaCard: React.FC<{videoId: string}> = ({videoId}) => {
 }
 
 const CheckboxList: React.FC<CheckboxListProps>  = ({data, setVideoId}) => {
-  const [checked, setChecked] = React.useState([0]);
+  const [checked, setChecked] = useState([0]);
 
   const handleToggle = (value: number) => () => {
     const currentIndex = checked.indexOf(value);
@@ -116,15 +116,34 @@ const CheckboxList: React.FC<CheckboxListProps>  = ({data, setVideoId}) => {
 
 const Course: React.FC = () => {
   const [data, setData] = React.useState([]);
-  const [videoId, setVideoid] = React.useState("QFaFIcGhPoM");
+  const [videoId, setVideoid] = React.useState("");
 
-  React.useEffect(() => {
-    fetch("http://localhost:8000/api/youtube/search?search_query=react+js")
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => setData(data));
-  }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/api/video/videos", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ courseId: '654aab19347b4a49ad20aa1d' }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        setVideoid(data.videos[0].videoId);
+        // console.log(data.videos[0]);
+        setData(data.videos);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []); // Make sure to add any dependencies if needed
 
   return (
     <Layout>
