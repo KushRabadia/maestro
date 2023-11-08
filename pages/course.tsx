@@ -42,7 +42,7 @@ const MediaCard: React.FC<{videoId: string}> = ({videoId}) => {
 }
 
 const CheckboxList: React.FC<CheckboxListProps>  = ({data, setVideoId}) => {
-  const [checked, setChecked] = React.useState([0]);
+  const [checked, setChecked] = useState([0]);
 
   const handleToggle = (value: number) => () => {
     const currentIndex = checked.indexOf(value);
@@ -118,7 +118,7 @@ const Course: React.FC = () => {
   const [data, setData] = React.useState([]);
   const [videoId, setVideoid] = React.useState("QFaFIcGhPoM");
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetch("http://localhost:8000/api/youtube/search?search_query=react+js")
       .then((res) => {
         return res.json();
