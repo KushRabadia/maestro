@@ -16,7 +16,7 @@
     "next": "14.0.1",
     "react": "^18",
     "react-dom": "^18",
-    "validator": "^13.11.0"
+    "validator": "^13.11.0",
     "react-multi-carousel": "^2.8.4",
     "react-youtube": "^10.1.0"
   },
