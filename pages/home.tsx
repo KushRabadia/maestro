@@ -29,25 +29,12 @@ const Home: React.FC = () => {
   return (
     <Layout>
       <div className="margin-md">
-<<<<<<< HEAD
-        {courses.map((listData, index) => (
-          index===currentlyVisible && <TitlebarImageList 
-            key={index} 
-            data={listData} 
-            listIndex={index}
-            length={courses.length}
-            setNext={setCurrentlyVisible}
-          />
-        ))}
-
-=======
         {courses.map(
           (listData, index) =>
             index === currentlyVisible && (
               <CarouselComponent key={index} data={listData} />
             )
         )}
->>>>>>> 08b08291a1ac6e406e0d6628c5682fcca09e67b4
       </div>
     </Layout>
   );
