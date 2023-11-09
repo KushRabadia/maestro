@@ -91,7 +91,7 @@ const Register: React.FC = () => {
 				setConfirmPasswordError(false);
 				setConfirmPasswordErrorMsg("");
 			}
-		};
+	};
 	
 	const checkFormValidity = (): boolean => {
 		let validity = true;
