@@ -77,7 +77,7 @@ const CarouselComponent: React.FC<CarouselComponentProps> = ({ data }) => {
         {data.map((course, index) => (
           <div key={index}>
             <ImageListItem key={course._id} className="margin-sm">
-              <Image
+              <img
                 src={`${course.imageUrl}?fit=crop&auto=format`}
                 alt={course.title}
                 loading="lazy"
