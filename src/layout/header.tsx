@@ -11,6 +11,7 @@ import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import SearchBar from '../components/search';
+import { CircularProgress } from '@mui/material';
 
 export default function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -20,8 +21,9 @@ export default function Header() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const [searchValue, setSearchValue] = useState<string>("");
-
+  const [loading, setLoading] = React.useState<Boolean>(false);
   const onSubmitSearch = (e: FormEvent) => {
+    setLoading(true)
     e.preventDefault();
     const search_query = searchValue.split(" ").join("+");
     fetch(`http://localhost:8000/api/youtube/search?search_query=${search_query}`)
@@ -29,6 +31,7 @@ export default function Header() {
         return res.json();
       })
       .then((data) => console.log(data));
+      setLoading(false);
   }
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -110,6 +113,7 @@ export default function Header() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
+      {loading && <CircularProgress />}
       <AppBar position="static">
         <Toolbar>
           <Link href="/home" className='text-link'>
@@ -132,6 +136,7 @@ export default function Header() {
           </form>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+            
             <IconButton size="large" aria-label="Courses" color="inherit">
               <LocalLibraryIcon />
             </IconButton>
@@ -148,6 +153,7 @@ export default function Header() {
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+            
             <IconButton
               size="large"
               aria-label="show more"

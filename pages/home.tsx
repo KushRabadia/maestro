@@ -12,6 +12,8 @@ import InfoIcon from '@mui/icons-material/Info';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { CircularProgress } from '@mui/material';
+import { error } from 'console';
 
 interface Course {
   _id: string;
@@ -97,7 +99,8 @@ const TitlebarImageList: React.FC<TitlebarImageListProps> = ({ data, listIndex, 
 const Home: React.FC = () => {
   const [currentlyVisible, setCurrentlyVisible] = React.useState<number>(0);
   const [courses, setCourses] = React.useState<Course[][]>([]);
-
+  const [loading, setLoading] = React.useState<Boolean>(false);
+  
   function chunkArray<Course>(array: Course[], chunkSize: number): Course[][] {
     const result: Course[][] = [];
     for (let i = 0; i < array.length; i += chunkSize) {
@@ -106,20 +109,31 @@ const Home: React.FC = () => {
     return result;
   }
 
+  
   useEffect(() => {
-    fetch("http://localhost:8000/api/course/courses")
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        const chunkedArray: Course[][] = chunkArray(data.courses, 6);
-        setCourses(chunkedArray);
-      });
+    setLoading(true); 
+    /*const delay = 2000; for testing purposes only delete after*/
+      fetch("http://localhost:8000/api/course/courses")
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          const chunkedArray: Course[][] = chunkArray(data.courses, 6);
+          setCourses(chunkedArray);
+          setLoading(true); /*change to false once tested*/
+        });
+        /*.catch((error) => {
+          console.error("Data not fetching");
+          setLoading(false);
+        })*/
   }, []);
-
+  
+  
   return (
     <Layout>
+      
       <div className="margin-md">
+        
         {courses.map((listData, index) => (
           index===currentlyVisible && <TitlebarImageList 
             key={index} 
@@ -129,6 +143,9 @@ const Home: React.FC = () => {
             setNext={setCurrentlyVisible}
           />
         ))}
+        <div className='spinner-circle'>
+        {loading && <CircularProgress />}
+        </div>
 
       </div>
     </Layout>
