@@ -1,79 +1,53 @@
 /* Reset default margin and padding */
-body, h1, h2, h3, p, ul, li {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+body,
+h1,
+h2,
+h3,
+p,
+ul,
+li {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Make images responsive */
 img {
-    max-width: 100%;
-    height: auto;
+  max-width: 100%;
+  height: auto;
 }
-  
+
 /* Set box-sizing to border-box for all elements */
-*, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
 }
-  
+
 .margin-sm {
-    margin: 1%;
+  margin: 1%;
 }
 .margin-md {
-    margin: 3%;
+  margin: 3%;
 }
 .margin-lg {
-    margin: 5%;
+  margin: 5%;
 }
 
 .text-link {
-    color: inherit;
-    text-decoration: inherit;
+  color: inherit;
+  text-decoration: inherit;
 }
 
 .flexRowCenter {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.imageListContainer {
-    overflow: hidden;
-    transition: transform 5s ease;
-}
-
-.home_imageList {
-    flex: 1;
-    flex-wrap: nowrap;
-    flex-direction: column;
-    padding: 0 20px;
-}
-
-.imageListContainer.left .home_imageList {
-    transform: translateX(-100%);
-}
-  
-.imageListContainer.right .home_imageList {
-    transform: translateX(100%);
-}
-
-.imageList_leftIcon {
-    position: absolute;
-    z-index: 1;
-    left: 1%;
-}
-
-.imageList_rightIcon {
-    position: absolute;
-    z-index: 1;
-    right: 1%;
-}
-
-.course_listItems {
-    text-align: center;
-    padding: 5px;
-    border-bottom: 1px solid black;
+.react-multiple-carousel__arrow {
+  background-color: #8338ec !important;
 }
