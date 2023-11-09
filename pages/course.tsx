@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router'
 import Layout from '../src/layout/layout';
 import Container from '@mui/material/Container';
 import YouTube, { YouTubeProps } from 'react-youtube';
@@ -116,7 +117,9 @@ const CheckboxList: React.FC<CheckboxListProps>  = ({data, setVideoId}) => {
 
 const Course: React.FC = () => {
   const [data, setData] = React.useState([]);
-  const [videoId, setVideoid] = React.useState("");
+  const [videoId, setVideoId] = React.useState("");
+  const router = useRouter();
+  const courseId = router.query.id;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -126,7 +129,7 @@ const Course: React.FC = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ courseId: '654aab19347b4a49ad20aa1d' }),
+          body: JSON.stringify({ courseId: courseId }),
         });
 
         if (!response.ok) {
@@ -134,8 +137,7 @@ const Course: React.FC = () => {
         }
 
         const data = await response.json();
-        setVideoid(data.videos[0].videoId);
-        // console.log(data.videos[0]);
+        setVideoId(data.videos[0].videoId);
         setData(data.videos);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -143,7 +145,7 @@ const Course: React.FC = () => {
     };
 
     fetchData();
-  }, []); // Make sure to add any dependencies if needed
+  }, [courseId]); 
 
   return (
     <Layout>
@@ -152,7 +154,7 @@ const Course: React.FC = () => {
           <MediaCard videoId={videoId}/>
         </Grid>
         <Grid xs={2}>
-          <CheckboxList data={data} setVideoId={setVideoid}/>
+          <CheckboxList data={data} setVideoId={setVideoId}/>
         </Grid>
       </Grid>
     </Layout>
