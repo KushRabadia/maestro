@@ -57,28 +57,6 @@ img {
     padding: 0 20px;
 }
 
-.imageListContainer.left .home_imageList {
-    transform: translateX(-100%);
-}
-  
-.imageListContainer.right .home_imageList {
-    transform: translateX(100%);
-}
-
-.imageList_leftIcon {
-    position: absolute;
-    z-index: 1;
-    left: 1%;
-}
-
-.imageList_rightIcon {
-    position: absolute;
-    z-index: 1;
-    right: 1%;
-}
-
-.course_listItems {
-    text-align: center;
-    padding: 5px;
-    border-bottom: 1px solid black;
+.react-multiple-carousel__arrow {
+  background-color: #8338ec !important;
 }
