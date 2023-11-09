@@ -14,23 +14,68 @@ interface SignInFormData {
 
 const Register: React.FC = () => {
 	const [formState, setFormState] = useState<SignInFormData>({
-    email: '',
-    password: '',
-  });
+        email: '',
+        password: '',
+    });
+
 	const [loading, setLoading] = useState(false);
 
+    const [emailError, setEmailError] = useState<boolean>(false);
+	const [emailErrorMsg, setEmailErrorMsg] = useState<string>("");
+
+	const [passwordError, setPasswordError] = useState<boolean>(false);
+	const [passwordErrorMsg, setPasswordErrorMsg] = useState<string>("");
+
 	const handleChange = (field: keyof SignInFormData) => (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setFormState({
-      ...formState,
-      [field]: event.target.value,
-    });
-  };
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const value = event.target.value
+        setFormState({
+            ...formState,
+            [field]: value,
+        });
+
+        if (field == 'email') {
+            if (value.trim() == "") {
+                setEmailError(true);
+                setEmailErrorMsg("email cannot be empty");
+            } else {
+                setEmailError(false);
+                setEmailErrorMsg("");
+            }
+        }
+        if (field == 'password') {
+            if (value.trim() == "") {
+                setPasswordError(true);
+                setPasswordErrorMsg("password cannot be empty");
+            } else {
+                setPasswordError(false);
+                setPasswordErrorMsg("");
+            }
+        }
+    };
+
+    const checkFormValidity = (): boolean => {
+        let validity = true;
+        if (formState.email.trim() == "") {
+            setEmailError(true);
+            setEmailErrorMsg("Please enter email");
+            validity = false;
+        }
+        if (formState.password.trim() == "") {
+            setPasswordError(true);
+            setPasswordErrorMsg("Please enter password");
+            validity = false;
+        }
+        return validity;
+    }
 
 	const signinHandler = async () => {
 		try {
 			setLoading(true);
+            if (emailError || passwordError || !checkFormValidity()) {
+				return;
+			}
 			
 			const bodyFormData = new FormData();
 			bodyFormData.append('email', formState.email);
@@ -67,84 +112,52 @@ const Register: React.FC = () => {
 	return (
 		<Layout>
 			<Container maxWidth="sm">
-				<Box
-					sx={{
-						display: 'flex',
-						flexDirection: 'row',
-						position: 'relative',
-						marginTop: 10,
-						justifyContent: 'center',
-						maxWidth: 'auto',
-						fontSize: 20,
-						gap: 5,
-					}}
-				>
+				<Box className={'register_boxLayout'}>
 					<Link href="/login">
-						<Button
-							sx={{
-								fontSize: 20,
-								textTransform: 'none',
-								fontWeight: 'bold',
-							}}
-						>
-							Login
-						</Button>
+						<Button className={'register_pageButton'}>Login</Button>
 					</Link>
 					<Link href="/register">
 						<Button
-							sx={{
-								fontSize: 20,
-								textTransform: 'none',
-								fontWeight: 'bold',
-								opacity: 0.75,
-							}}
+							className={'register_pageButton'}
+							sx={{ opacity: 0.5 }}
 						>
 							Register
 						</Button>
 					</Link>
 				</Box>
 
-				<Container
-					maxWidth="sm"
-					sx={{
-						marginTop: 5,
-						boxShadow: 3,
-						borderRadius: 5,
-						padding: 5,
-					}}
-				>
+				<Container maxWidth="sm" className="register_containerLayout">
 					<Stack gap={4}>
 						<Typography variant="h6">Login</Typography>
 
 						<TextField
+                            error={emailError}
+                            helperText={emailErrorMsg}
 							id="standard-basic"
-							label="Email Address..."
+							label="Email Address"
 							variant="outlined"
 							required
+							className="register_textField"
 							type="email"
 							onChange={handleChange('email')}
 							value={formState.email}
-							sx={{ borderRadius: 0, opacity: 0.5 }}
 						/>
 						<TextField
+                            error={passwordError}
+                            helperText={passwordErrorMsg}
 							id="standard-basic"
-							label="Password..."
+							label="Password"
 							variant="outlined"
 							required
+							className="register_textField"
 							type="password"
 							onChange={handleChange('password')}
 							value={formState.password}
-							sx={{ borderRadius: 0, opacity: 0.5 }}
 						/>
 
 						<Button
 							variant="contained"
-							sx={{
-								textTransform: 'none',
-								fontWeight: 'bold',
-								display: 'block',
-								margin: '0 auto',
-							}}
+							className="register_dataButton"
 							type="submit"
 							onClick={signinHandler}
 						>
