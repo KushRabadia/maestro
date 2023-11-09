@@ -12,6 +12,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import CommentIcon from '@mui/icons-material/Comment';
+import { CircularProgress } from '@mui/material';
 
 interface VideoItem {
   videoId: string;
@@ -118,10 +119,13 @@ const CheckboxList: React.FC<CheckboxListProps>  = ({data, setVideoId}) => {
 const Course: React.FC = () => {
   const [data, setData] = React.useState([]);
   const [videoId, setVideoId] = React.useState("");
+  const [loading, setLoading] = React.useState<Boolean>(false);
   const router = useRouter();
   const courseId = router.query.id;
+  
 
   useEffect(() => {
+    setLoading(true);
     const fetchData = async () => {
       try {
         const response = await fetch("http://localhost:8000/api/video/videos", {
@@ -139,6 +143,7 @@ const Course: React.FC = () => {
         const data = await response.json();
         setVideoId(data.videos[0].videoId);
         setData(data.videos);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -149,7 +154,9 @@ const Course: React.FC = () => {
 
   return (
     <Layout>
+      <div className='spinner-circle'>
       <Grid container>
+        {loading && <CircularProgress />}
         <Grid xs={10}>
           <MediaCard videoId={videoId}/>
         </Grid>
@@ -157,6 +164,7 @@ const Course: React.FC = () => {
           <CheckboxList data={data} setVideoId={setVideoId}/>
         </Grid>
       </Grid>
+      </div>
     </Layout>
   );
 };
