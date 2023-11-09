@@ -14,9 +14,10 @@ interface SignInFormData {
 
 const Register: React.FC = () => {
 	const [formState, setFormState] = useState<SignInFormData>({
-    email: '',
-    password: '',
-  });
+        email: '',
+        password: '',
+    });
+
 	const [loading, setLoading] = useState(false);
 
     const [emailError, setEmailError] = useState<boolean>(false);
@@ -26,12 +27,12 @@ const Register: React.FC = () => {
 	const [passwordErrorMsg, setPasswordErrorMsg] = useState<string>("");
 
 	const handleChange = (field: keyof SignInFormData) => (
-    event: React.ChangeEvent<HTMLInputElement>
+        event: React.ChangeEvent<HTMLInputElement>
     ) => {
         const value = event.target.value
         setFormState({
-        ...formState,
-        [field]: value,
+            ...formState,
+            [field]: value,
         });
 
         if (field == 'email') {
