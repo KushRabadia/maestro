@@ -67,6 +67,8 @@ export default function Header() {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem><Link href="/login" className='text-link'>Login</Link></MenuItem>
+      
     </Menu>
   );
 
