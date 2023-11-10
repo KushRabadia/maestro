@@ -2,6 +2,7 @@ import CarouselComponent, { Course } from "@/components/carousel";
 import React, { useEffect } from "react";
 import "react-multi-carousel/lib/styles.css";
 import Layout from "../src/layout/layout";
+import { getCourses } from "../lib/config";
 
 const Home: React.FC = () => {
   const [currentlyVisible, setCurrentlyVisible] = React.useState<number>(0);
@@ -16,7 +17,8 @@ const Home: React.FC = () => {
   }
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/course/courses")
+    console.log(getCourses);
+    fetch(getCourses)
       .then((res) => {
         return res.json();
       })
