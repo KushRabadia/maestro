@@ -45,7 +45,7 @@ const CarouselComponent: React.FC<CarouselComponentProps> = ({ data }) => {
               max: 3000,
               min: 1024,
             },
-            items: 5,
+            items: 6,
             partialVisibilityGutter: 64,
           },
           mobile: {
@@ -71,13 +71,13 @@ const CarouselComponent: React.FC<CarouselComponentProps> = ({ data }) => {
         shouldResetAutoplay
         showDots={false}
         sliderClass=""
-        slidesToSlide={1}
+        slidesToSlide={5}
         swipeable
       >
         {data.map((course, index) => (
           <div key={index}>
             <ImageListItem key={course._id} className="margin-sm">
-              <Image
+              <img
                 src={`${course.imageUrl}?fit=crop&auto=format`}
                 alt={course.title}
                 loading="lazy"

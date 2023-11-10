@@ -9,8 +9,8 @@ import Grid from "@mui/material/Unstable_Grid2";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import YouTube, { YouTubeProps } from "react-youtube";
+import { getVideos } from "../../lib/config";
 import Layout from "../../src/layout/layout";
-import { createVideo, getVideos } from "../../lib/config";
 
 interface VideoItem {
   videoId: string;

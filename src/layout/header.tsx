@@ -1,17 +1,17 @@
-import React, { useState, useEffect, FormEvent } from "react";
-import Link from "next/link";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
+import MoreIcon from "@mui/icons-material/MoreVert";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import MoreIcon from "@mui/icons-material/MoreVert";
-import SearchBar from "../components/search";
+import MenuItem from "@mui/material/MenuItem";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Link from "next/link";
+import React, { FormEvent, useState } from "react";
 import { getYoutubeSearch } from "../../lib/config";
+import SearchBar from "../components/search";
 
 export default function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
