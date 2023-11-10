@@ -1,20 +1,22 @@
-import React, { useState, useEffect, FormEvent } from 'react';
-import Link from 'next/link';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MoreIcon from '@mui/icons-material/MoreVert';
-import SearchBar from '../components/search';
+import React, { useState, useEffect, FormEvent } from "react";
+import Link from "next/link";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
+import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import MoreIcon from "@mui/icons-material/MoreVert";
+import SearchBar from "../components/search";
+import { getYoutubeSearch } from "../../lib/config";
 
 export default function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<null | HTMLElement>(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
+    useState<null | HTMLElement>(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -24,12 +26,12 @@ export default function Header() {
   const onSubmitSearch = (e: FormEvent) => {
     e.preventDefault();
     const search_query = searchValue.split(" ").join("+");
-    fetch(`http://localhost:8000/api/youtube/search?search_query=${search_query}`)
+    fetch(getYoutubeSearch + `?search_query=${search_query}`)
       .then((res) => {
         return res.json();
       })
       .then((data) => console.log(data));
-  }
+  };
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -48,50 +50,53 @@ export default function Header() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const menuId = 'primary-search-account-menu';
+  const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
+        vertical: "top",
+        horizontal: "right",
       }}
       id={menuId}
       keepMounted
       transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
+        vertical: "top",
+        horizontal: "right",
       }}
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem><Link href="/login" className='text-link'>Login</Link></MenuItem>
-      
+      <MenuItem>
+        <Link href="/login" className="text-link">
+          Login
+        </Link>
+      </MenuItem>
     </Menu>
   );
 
-  const mobileMenuId = 'primary-search-account-menu-mobile';
+  const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
+        vertical: "top",
+        horizontal: "right",
       }}
       id={mobileMenuId}
       keepMounted
       transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
+        vertical: "top",
+        horizontal: "right",
       }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
         <IconButton size="large" color="inherit">
-          <LocalLibraryIcon/>
+          <LocalLibraryIcon />
         </IconButton>
         <p>Courses</p>
       </MenuItem>
@@ -114,12 +119,12 @@ export default function Header() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Link href="/home" className='text-link'>
+          <Link href="/home" className="text-link">
             <Typography
               variant="h6"
               noWrap
               component="div"
-              sx={{ display: { xs: 'none', sm: 'block' } }}
+              sx={{ display: { xs: "none", sm: "block" } }}
             >
               MaestroAI
             </Typography>
@@ -127,13 +132,13 @@ export default function Header() {
           <form onSubmit={onSubmitSearch}>
             <SearchBar
               placeholder="Search for any topic"
-              inputProps={{ 'aria-label': 'search' }}
+              inputProps={{ "aria-label": "search" }}
               onChange={(e) => setSearchValue(e.target.value)}
               value={searchValue}
             />
           </form>
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton size="large" aria-label="Courses" color="inherit">
               <LocalLibraryIcon />
             </IconButton>
@@ -149,7 +154,7 @@ export default function Header() {
               <AccountCircle />
             </IconButton>
           </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="show more"
