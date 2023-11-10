@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
-import Layout from '../../src/layout/layout';
+import Layout from '@/layout/layout';
 import Container from '@mui/material/Container';
 import YouTube, { YouTubeProps } from 'react-youtube';
 import List from '@mui/material/List';
