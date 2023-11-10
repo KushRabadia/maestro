@@ -11,7 +11,7 @@ import Menu from '@mui/material/Menu';
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import SearchBar from '../components/search';
+import SearchBar from '@/components/search';
 
 export default function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
