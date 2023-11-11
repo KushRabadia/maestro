@@ -7,6 +7,8 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { Button, Stack, Typography } from '@mui/material';
+import { GoogleLogin } from 'react-google-login';
+import GoogleIcon from '@mui/icons-material/Google';
 
 interface SignUpFormData {
 	username: string;
@@ -25,16 +27,18 @@ const Register: React.FC = () => {
 	const [loading, setLoading] = useState(false);
 
 	const [usernameError, setUsernameError] = useState<boolean>(false);
-	const [usernameErrorMsg, setUsernameErrorMsg] = useState<string>("");
-	
+	const [usernameErrorMsg, setUsernameErrorMsg] = useState<string>('');
+
 	const [emailError, setEmailError] = useState<boolean>(false);
-	const [emailErrorMsg, setEmailErrorMsg] = useState<string>("");
+	const [emailErrorMsg, setEmailErrorMsg] = useState<string>('');
 
 	const [passwordError, setPasswordError] = useState<boolean>(false);
-	const [passwordErrorMsg, setPasswordErrorMsg] = useState<string>("");
+	const [passwordErrorMsg, setPasswordErrorMsg] = useState<string>('');
 
-	const [confirmPasswordError, setConfirmPasswordError] = useState<boolean>(false);
-	const [confirmPasswordErrorMsg, setConfirmPasswordErrorMsg] = useState<string>("");
+	const [confirmPasswordError, setConfirmPasswordError] =
+		useState<boolean>(false);
+	const [confirmPasswordErrorMsg, setConfirmPasswordErrorMsg] =
+		useState<string>('');
 
 	const handleChange =
 		(field: keyof SignUpFormData) =>
@@ -46,82 +50,93 @@ const Register: React.FC = () => {
 				[field]: value,
 			});
 
-		
 			if (field == 'username') {
-				if (value.trim() == "") {
+				if (value.trim() == '') {
 					setUsernameError(true);
-					setUsernameErrorMsg("Please enter username");
+					setUsernameErrorMsg('Please enter an username.');
 				} else {
 					setUsernameError(false);
-					setUsernameErrorMsg("");
+					setUsernameErrorMsg('');
 				}
 			}
 			if (field == 'email') {
-				if (value.trim() == "") {
+				if (value.trim() == '') {
 					setEmailError(true);
-					setEmailErrorMsg("please enter an email");
+					setEmailErrorMsg('Please enter an email.');
 				} else {
 					setEmailError(false);
-					setEmailErrorMsg("");
+					setEmailErrorMsg('');
 				}
 
 				if (validator.isEmail(value)) {
 					setEmailError(false);
-					setEmailErrorMsg("");
+					setEmailErrorMsg('');
 				} else {
 					setEmailError(true);
-					setEmailErrorMsg("please enter a valid email");
+					setEmailErrorMsg('Please enter a valid email.');
 				}
 			}
 			if (field == 'password') {
 				if (value.length < 7) {
 					setPasswordError(true);
-					setPasswordErrorMsg("Use 6 characters or longer.");
+					setPasswordErrorMsg('Use 6 characters or longer.');
 				} else {
 					setPasswordError(false);
-					setPasswordErrorMsg("");
+					setPasswordErrorMsg('');
 				}
 			}
 
-			if ((field == 'confirmPassword' && value != formState.password) || (field == 'password' && value != formState.confirmPassword)) {
+			if (
+				(field == 'confirmPassword' && value != formState.password) ||
+				(field == 'password' && value != formState.confirmPassword)
+			) {
 				setConfirmPasswordError(true);
-				setConfirmPasswordErrorMsg("Passwords do not match.");
+				setConfirmPasswordErrorMsg('Passwords do not match.');
 			}
-			if ((field == 'confirmPassword' && value == formState.password) || (field == 'password' && value == formState.confirmPassword)) {
+			if (
+				(field == 'confirmPassword' && value == formState.password) ||
+				(field == 'password' && value == formState.confirmPassword)
+			) {
 				setConfirmPasswordError(false);
-				setConfirmPasswordErrorMsg("");
+				setConfirmPasswordErrorMsg('');
 			}
-	};
-	
+		};
+
 	const checkFormValidity = (): boolean => {
 		let validity = true;
-		if (formState.username.trim() == "") {
+		if (formState.username.trim() == '') {
 			setUsernameError(true);
-			setUsernameErrorMsg("Please enter username");
+			setUsernameErrorMsg('Please enter username');
 			validity = false;
 		}
-		if (formState.email.trim() == "") {
+		if (formState.email.trim() == '') {
 			setEmailError(true);
-			setEmailErrorMsg("Please enter email");
+			setEmailErrorMsg('Please enter email');
 			validity = false;
 		}
-		if (formState.password.trim() == "") {
+		if (formState.password.trim() == '') {
 			setPasswordError(true);
-			setPasswordErrorMsg("Please enter password");
+			setPasswordErrorMsg('Please enter password');
 			validity = false;
 		}
-		if (formState.confirmPassword.trim() == "") {
+		if (formState.confirmPassword.trim() == '') {
 			setConfirmPasswordError(true);
-			setConfirmPasswordErrorMsg("Please enter confirmPassword");
+			setConfirmPasswordErrorMsg('Please enter confirmPassword');
 			validity = false;
 		}
 		return validity;
-	}
-			
+	};
+
 	const signupHandler = async () => {
 		try {
 			setLoading(true);
-			if ((usernameError || emailError || passwordError || confirmPasswordError || !checkFormValidity())) {
+			if (
+				usernameError ||
+				emailError ||
+				passwordError ||
+				confirmPasswordError ||
+				!checkFormValidity()
+			) {
 				return;
 			}
 
@@ -248,6 +263,20 @@ const Register: React.FC = () => {
 						>
 							Register
 						</Button>
+						<GoogleLogin
+							clientId="1072100385276-5temfvvrnofl9epfmf18ctop0mrubmhe.apps.googleusercontent.com"
+							render={(renderProps) => (
+								<Button
+									variant="contained"
+									className='register_dataButton'
+									onClick={renderProps.onClick}
+								
+								>
+									Continue with Google
+								</Button>
+							)}
+							cookiePolicy={'single_host_origin'}
+						/>
 					</Stack>
 				</Container>
 			</Container>
