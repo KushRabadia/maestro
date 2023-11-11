@@ -19,7 +19,7 @@ import { getYoutubeSearch } from '../../lib/config';
 
 export default function Header() {
   const user = useSelector((state: RootState) => state.user);
-  const token = useAuthToken();
+  const { token } = useAuthToken();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
