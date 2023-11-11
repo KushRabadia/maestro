@@ -1,5 +1,6 @@
 import React, { useState, useEffect, FormEvent } from 'react';
 import Link from 'next/link';
+import Router from 'next/router';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,7 +11,7 @@ import Menu from '@mui/material/Menu';
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import SearchBar from '../components/search';
+import SearchBar from '@/components/search';
 
 export default function Header() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -28,7 +29,10 @@ export default function Header() {
       .then((res) => {
         return res.json();
       })
-      .then((data) => console.log(data));
+      .then((data) => {
+        const courseId = data[0].courseId;
+        Router.push(`/course/${courseId}`);
+      });
   }
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
