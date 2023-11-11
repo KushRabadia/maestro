@@ -1,12 +1,13 @@
-import React, { useState } from "react";
-import Router from "next/router";
-import Link from "next/link";
-import validator from "validator";
-import Layout from "@/layout/layout";
-import TextField from "@mui/material/TextField";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import { Button, Stack, Typography } from "@mui/material";
+import Loader from "@/components/loader";
+import Layout from '@/layout/layout';
+import { Button, Stack, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import TextField from '@mui/material/TextField';
+import Link from 'next/link';
+import Router from 'next/router';
+import React, { useState } from 'react';
+import validator from 'validator';
 import { createUser } from "../lib/config";
 
 interface SignUpFormData {
@@ -251,7 +252,7 @@ const Register: React.FC = () => {
               type="submit"
               onClick={signupHandler}
             >
-              Register
+              {loading ? <Loader replaceIcon={true} /> : "Register"}
             </Button>
           </Stack>
         </Container>
