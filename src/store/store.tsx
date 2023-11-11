@@ -1,7 +1,7 @@
-// src/store/store.ts
 import { configureStore } from '@reduxjs/toolkit';
 import { createWrapper, HYDRATE } from "next-redux-wrapper";
 import userReducer from './reducers/userReducer';
+import { User } from '@/types';
 
 const store = configureStore({
   reducer: {
@@ -9,7 +9,9 @@ const store = configureStore({
   },
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = {
+  user: { user: User | null };
+};
 export type AppDispatch = typeof store.dispatch;
 export const wrapper = createWrapper(() => store);
 

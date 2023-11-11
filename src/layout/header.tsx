@@ -1,6 +1,8 @@
 import React, { useState, useEffect, FormEvent } from 'react';
 import Link from 'next/link';
 import Router from 'next/router';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,8 +14,11 @@ import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import SearchBar from '@/components/search';
+import { useAuthToken } from '@/utils/auth';
 
 export default function Header() {
+  const user = useSelector((state: RootState) => state.user);
+  const { token } = useAuthToken();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -25,7 +30,13 @@ export default function Header() {
   const onSubmitSearch = (e: FormEvent) => {
     e.preventDefault();
     const search_query = searchValue.split(" ").join("+");
-    fetch(`http://localhost:8000/api/youtube/search?search_query=${search_query}`)
+    fetch(`http://localhost:8000/api/youtube/search?search_query=${search_query}`, {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token 
+          },
+      })
       .then((res) => {
         return res.json();
       })

@@ -6,6 +6,7 @@ import { wrapper } from "@/store/store";
 import store from '@/store/store';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { setUser } from '@/store/actions/userActions';
+import { useAuthToken } from '@/utils/auth';
 import "../styles/global.css";
 
 let theme = createTheme({
@@ -30,12 +31,10 @@ theme = createTheme(theme, {
 function MyApp({ Component, ...rest }: AppProps) {
   const { store, props } = wrapper.useWrappedStore(rest);
   const { pageProps } = props;
-
+  const { token, expiryDate } = useAuthToken();
+  
   useEffect(() => {
     const initializeApp = async () => {
-      const token = localStorage.getItem('token');
-      const expiryDate = localStorage.getItem('expiryDate');
-
       if (token && expiryDate) {
         try {
           const currentTimestamp = new Date().getTime();
