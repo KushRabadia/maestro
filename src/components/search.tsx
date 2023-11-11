@@ -1,3 +1,4 @@
+import Loader from "@/components/loader";
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
@@ -47,18 +48,19 @@ interface SearchProps {
   placeholder: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
+  loading: boolean;
   inputProps?: {
     'aria-label'?: string;
   };
 }
 
 const SearchBar: React.FC<SearchProps> = (props) => {
-  const { placeholder, onChange, value, inputProps } = props;
+  const { placeholder, onChange, value, inputProps, loading } = props;
 
   return (
     <Search>
       <SearchIconWrapper>
-        <SearchIcon />
+        {loading ? <Loader replaceIcon={true} /> : <SearchIcon />}
       </SearchIconWrapper>
       <StyledInputBase
         placeholder={placeholder}
