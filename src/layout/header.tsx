@@ -1,5 +1,6 @@
 import React, { useState, useEffect, FormEvent } from 'react';
 import Link from 'next/link';
+import Router from 'next/router';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -20,15 +21,21 @@ export default function Header() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const [searchValue, setSearchValue] = useState<string>("");
+  const [loading, setLoading] = React.useState<boolean>(false);
 
   const onSubmitSearch = (e: FormEvent) => {
+    setLoading(true)
     e.preventDefault();
     const search_query = searchValue.split(" ").join("+");
     fetch(`http://localhost:8000/api/youtube/search?search_query=${search_query}`)
       .then((res) => {
         return res.json();
       })
-      .then((data) => console.log(data));
+      .then((data) => {
+        const courseId = data[0].courseId;
+        Router.push(`/course/${courseId}`);
+        setLoading(false);
+      });
   }
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -129,11 +136,13 @@ export default function Header() {
               placeholder="Search for any topic"
               inputProps={{ 'aria-label': 'search' }}
               onChange={(e) => setSearchValue(e.target.value)}
+              loading={loading}
               value={searchValue}
             />
           </form>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+            
             <IconButton size="large" aria-label="Courses" color="inherit">
               <LocalLibraryIcon />
             </IconButton>
@@ -150,6 +159,7 @@ export default function Header() {
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+            
             <IconButton
               size="large"
               aria-label="show more"

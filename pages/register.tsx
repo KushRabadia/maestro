@@ -6,6 +6,7 @@ import Layout from '@/layout/layout';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
+import Loader from "@/components/loader";
 import { Button, Stack, Typography } from '@mui/material';
 
 interface SignUpFormData {
@@ -246,7 +247,7 @@ const Register: React.FC = () => {
 							type="submit"
 							onClick={signupHandler}
 						>
-							Register
+							{loading ? <Loader replaceIcon={true} /> : "Register"}
 						</Button>
 					</Stack>
 				</Container>
