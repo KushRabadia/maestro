@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Router from 'next/router';
 import Layout from '@/layout/layout';
+import Loader from "@/components/loader";
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -20,7 +21,7 @@ const Register: React.FC = () => {
 
 	const [loading, setLoading] = useState(false);
 
-    const [emailError, setEmailError] = useState<boolean>(false);
+  const [emailError, setEmailError] = useState<boolean>(false);
 	const [emailErrorMsg, setEmailErrorMsg] = useState<string>("");
 
 	const [passwordError, setPasswordError] = useState<boolean>(false);
@@ -73,7 +74,7 @@ const Register: React.FC = () => {
 	const signinHandler = async () => {
 		try {
 			setLoading(true);
-            if (emailError || passwordError || !checkFormValidity()) {
+      if (emailError || passwordError || !checkFormValidity()) {
 				return;
 			}
 			
@@ -161,7 +162,7 @@ const Register: React.FC = () => {
 							type="submit"
 							onClick={signinHandler}
 						>
-							Login
+							{loading ? <Loader replaceIcon={true} /> : "Login"}
 						</Button>
 					</Stack>
 				</Container>
