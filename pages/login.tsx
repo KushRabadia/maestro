@@ -1,5 +1,7 @@
-import Loader from "@/components/loader";
+import Loader from '@/components/loader';
 import Layout from '@/layout/layout';
+import { setUser } from '@/store/actions/userActions';
+import { User } from '@/types';
 import { Button, Stack, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -7,7 +9,7 @@ import TextField from '@mui/material/TextField';
 import Link from 'next/link';
 import Router from 'next/router';
 import React, { useState } from 'react';
-import { loginUser } from "../lib/config";
+import { useDispatch } from 'react-redux';
 
 interface SignInFormData {
   email: string;
@@ -15,10 +17,11 @@ interface SignInFormData {
 }
 
 const Register: React.FC = () => {
-	const [formState, setFormState] = useState<SignInFormData>({
-        email: '',
-        password: '',
-    });
+	const dispatch = useDispatch();
+  const [formState, setFormState] = useState<SignInFormData>({
+    email: "",
+    password: "",
+  });
 
 	const [loading, setLoading] = useState(false);
 
@@ -101,9 +104,12 @@ const Register: React.FC = () => {
 			}
 
 			const resData = await response.json();
-			localStorage.setItem('token', resData.token);
+			const userData: User = resData.user;
+			dispatch(setUser(userData));
+
 			const remainingMilliseconds = 60 * 60 * 1000;
 			const expiryDate = new Date(new Date().getTime() + remainingMilliseconds);
+			localStorage.setItem('token', resData.token);
 			localStorage.setItem('expiryDate', expiryDate.toISOString());
 			Router.push('/home');
 		} catch (err) {
