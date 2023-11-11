@@ -1,19 +1,25 @@
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
-import MoreIcon from "@mui/icons-material/MoreVert";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Link from "next/link";
-import React, { FormEvent, useState } from "react";
-import { getYoutubeSearch } from "../../lib/config";
-import SearchBar from "../components/search";
+import SearchBar from '@/components/search';
+import { RootState } from '@/store/store';
+import { useAuthToken } from '@/utils/auth';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
+import MoreIcon from '@mui/icons-material/MoreVert';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Link from 'next/link';
+import Router from 'next/router';
+import React, { FormEvent, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getYoutubeSearch } from '../../lib/config';
 
 export default function Header() {
+  const user = useSelector((state: RootState) => state.user);
+  const { token } = useAuthToken();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
@@ -28,7 +34,13 @@ export default function Header() {
     setLoading(true)
     e.preventDefault();
     const search_query = searchValue.split(" ").join("+");
-    fetch(getYoutubeSearch + `?search_query=${search_query}`)
+    fetch(getYoutubeSearch + `?search_query=${search_query}`, {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token 
+          },
+      })
       .then((res) => {
         return res.json();
       })
