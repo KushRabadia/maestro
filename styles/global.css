@@ -1,6 +1,6 @@
 /* Reset default margin and padding */
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 body,
 h1,
@@ -18,47 +18,49 @@ li {
 
 /* Make images responsive */
 img {
-    max-width: 100%;
-    height: auto;
+  max-width: 100%;
+  height: auto;
 }
-  
+
 /* Set box-sizing to border-box for all elements */
-*, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
 }
-  
+
 .margin-sm {
-    margin: 1%;
+  margin: 1%;
 }
 .margin-md {
-    margin: 3%;
+  margin: 3%;
 }
 .margin-lg {
-    margin: 5%;
+  margin: 5%;
 }
 
 .text-link {
-    color: inherit;
-    text-decoration: inherit;
+  color: inherit;
+  text-decoration: inherit;
 }
 
 .flexRowCenter {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .imageListContainer {
-    overflow: hidden;
-    transition: transform 5s ease;
+  overflow: hidden;
+  transition: transform 5s ease;
 }
 
 .home_imageList {
-    flex: 1;
-    flex-wrap: nowrap;
-    flex-direction: column;
-    padding: 0 20px;
+  flex: 1;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  padding: 0 20px;
 }
 
 .react-multiple-carousel__arrow {
@@ -66,40 +68,40 @@ img {
 }
 
 .register_boxLayout {
-    display: flex;
-    flex-direction: row;
-    margin-top: 80px;
-    justify-content: center;
-    font-size: 20px;
-    gap: 40px;
+  display: flex;
+  flex-direction: row;
+  margin-top: 80px;
+  justify-content: center;
+  font-size: 20px;
+  gap: 40px;
 }
 
 .register_pageButton {
-    font-size: 20px;
-    text-transform: none;
-    font-weight: bold;
-    color: black;
+  font-size: 20px;
+  text-transform: none;
+  font-weight: bold;
+  color: black;
 }
 
-.register_containerLayout{
-    margin-top: 40px;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    border-radius: 20px;
-    padding: 40px 24px;
-    display: flex;
-    flex-direction: column;
+.register_containerLayout {
+  margin-top: 40px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border-radius: 20px;
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
 }
 
 .register_dataButton {
-    text-transform: none;
-    font-weight: bold;
-    display: block;
-    margin: 0 auto;
+  text-transform: none;
+  font-weight: bold;
+  display: block;
+  margin: 0 auto;
 }
 
 .register_textField {
-    border-radius: 0;
-    opacity: 0.5;
+  border-radius: 0;
+  opacity: 0.5;
 }
 
 .carousel-container {
@@ -110,4 +112,21 @@ img {
     font-size: 2rem;
     color: #333;
     margin-bottom: 1rem; /* Adjust the spacing between header and carousel */
+}
+.course_listItems {
+    text-align: center;
+    padding: 5px;
+    border-bottom: 1px solid black;
+}
+
+.loader_circle{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.circular_progress{
+    color: aliceblue;
+    size: small;
 }
