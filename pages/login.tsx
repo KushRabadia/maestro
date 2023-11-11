@@ -6,6 +6,8 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { Button, Stack, Typography } from '@mui/material';
 import Link from 'next/link';
+import { useDispatch } from 'react-redux';
+import { setUser } from '@/store/actions/userActions';
 
 interface SignInFormData {
   email: string;
@@ -13,6 +15,7 @@ interface SignInFormData {
 }
 
 const Register: React.FC = () => {
+	const dispatch = useDispatch();
 	const [formState, setFormState] = useState<SignInFormData>({
         email: '',
         password: '',
@@ -98,9 +101,12 @@ const Register: React.FC = () => {
 			}
 
 			const resData = await response.json();
-			localStorage.setItem('token', resData.token);
+			const userData = resData.user;
+			dispatch(setUser(userData));
+
 			const remainingMilliseconds = 60 * 60 * 1000;
 			const expiryDate = new Date(new Date().getTime() + remainingMilliseconds);
+			localStorage.setItem('token', resData.token);
 			localStorage.setItem('expiryDate', expiryDate.toISOString());
 			Router.push('/home');
 		} catch (err) {
