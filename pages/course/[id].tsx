@@ -1,16 +1,17 @@
-import CommentIcon from "@mui/icons-material/Comment";
-import Checkbox from "@mui/material/Checkbox";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import Grid from "@mui/material/Unstable_Grid2";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import YouTube, { YouTubeProps } from "react-youtube";
+import Loader from "@/components/loader";
+import Layout from '@/layout/layout';
+import CommentIcon from '@mui/icons-material/Comment';
+import Checkbox from '@mui/material/Checkbox';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Grid from '@mui/material/Unstable_Grid2';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import YouTube, { YouTubeProps } from 'react-youtube';
 import { getVideos } from "../../lib/config";
-import Layout from "../../src/layout/layout";
 
 interface VideoItem {
   videoId: string;
@@ -118,8 +119,10 @@ const CheckboxList: React.FC<CheckboxListProps> = ({ data, setVideoId }) => {
 const Course: React.FC = () => {
   const [data, setData] = React.useState([]);
   const [videoId, setVideoId] = React.useState("");
+  const [loading, setLoading] = React.useState<Boolean>(true);
   const router = useRouter();
   const courseId = router.query.id;
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -139,6 +142,7 @@ const Course: React.FC = () => {
         const data = await response.json();
         setVideoId(data.videos[0].videoId);
         setData(data.videos);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -149,14 +153,16 @@ const Course: React.FC = () => {
 
   return (
     <Layout>
-      <Grid container>
-        <Grid xs={10}>
-          <MediaCard videoId={videoId} />
+      {loading ? <Loader /> : (
+        <Grid container>
+          <Grid xs={10}>
+            <MediaCard videoId={videoId}/>
+          </Grid>
+          <Grid xs={2}>
+            <CheckboxList data={data} setVideoId={setVideoId}/>
+          </Grid>
         </Grid>
-        <Grid xs={2}>
-          <CheckboxList data={data} setVideoId={setVideoId} />
-        </Grid>
-      </Grid>
+      )}
     </Layout>
   );
 };

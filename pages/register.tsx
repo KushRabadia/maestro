@@ -1,3 +1,4 @@
+import Loader from "@/components/loader";
 import Layout from '@/layout/layout';
 import { setUser } from '@/store/actions/userActions';
 import { User } from '@/types';
@@ -258,7 +259,7 @@ const Register: React.FC = () => {
               type="submit"
               onClick={signupHandler}
             >
-              Register
+              {loading ? <Loader replaceIcon={true} /> : "Register"}
             </Button>
           </Stack>
         </Container>

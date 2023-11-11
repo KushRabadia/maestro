@@ -113,3 +113,20 @@ img {
     color: #333;
     margin-bottom: 1rem; /* Adjust the spacing between header and carousel */
 }
+.course_listItems {
+    text-align: center;
+    padding: 5px;
+    border-bottom: 1px solid black;
+}
+
+.loader_circle{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.circular_progress{
+    color: aliceblue;
+    size: small;
+}

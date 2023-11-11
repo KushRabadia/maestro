@@ -28,8 +28,10 @@ export default function Header() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const [searchValue, setSearchValue] = useState<string>("");
+  const [loading, setLoading] = React.useState<boolean>(false);
 
   const onSubmitSearch = (e: FormEvent) => {
+    setLoading(true)
     e.preventDefault();
     const search_query = searchValue.split(" ").join("+");
     fetch(getYoutubeSearch + `?search_query=${search_query}`, {
@@ -45,6 +47,7 @@ export default function Header() {
       .then((data) => {
         const courseId = data[0].courseId;
         Router.push(`/course/${courseId}`);
+        setLoading(false);
       });
   }
 
@@ -149,11 +152,12 @@ export default function Header() {
               placeholder="Search for any topic"
               inputProps={{ "aria-label": "search" }}
               onChange={(e) => setSearchValue(e.target.value)}
+              loading={loading}
               value={searchValue}
             />
           </form>
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size="large" aria-label="Courses" color="inherit">
               <LocalLibraryIcon />
             </IconButton>
@@ -169,7 +173,7 @@ export default function Header() {
               <AccountCircle />
             </IconButton>
           </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
+          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
               aria-label="show more"
