@@ -1,7 +1,6 @@
-import Layout from '@/layout/layout';
 import Loader from "@/components/loader";
+import Layout from '@/layout/layout';
 import CommentIcon from '@mui/icons-material/Comment';
-import { CircularProgress } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -12,6 +11,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import YouTube, { YouTubeProps } from 'react-youtube';
+import { getVideos } from "../../lib/config";
 
 interface VideoItem {
   videoId: string;
@@ -23,26 +23,24 @@ interface CheckboxListProps {
   setVideoId(videoId: string): void;
 }
 
-const MediaCard: React.FC<{videoId: string}> = ({videoId}) => {
-  const onPlayerReady: YouTubeProps['onReady'] = (event) => {
+const MediaCard: React.FC<{ videoId: string }> = ({ videoId }) => {
+  const onPlayerReady: YouTubeProps["onReady"] = (event) => {
     // access to player in all event handlers via event.target
     event.target.pauseVideo();
-  }
+  };
 
   const opts = {
-    height: '720',
-    width: '100%',
+    height: "720",
+    width: "100%",
     playerVars: {
       // https://developers.google.com/youtube/player_parameters
       autoplay: 1,
     },
   };
-  return (
-    <YouTube videoId={videoId} opts={opts} onReady={onPlayerReady} />
-  );
-}
+  return <YouTube videoId={videoId} opts={opts} onReady={onPlayerReady} />;
+};
 
-const CheckboxList: React.FC<CheckboxListProps>  = ({data, setVideoId}) => {
+const CheckboxList: React.FC<CheckboxListProps> = ({ data, setVideoId }) => {
   const [checked, setChecked] = useState([0]);
 
   const handleToggle = (value: number) => () => {
@@ -59,21 +57,24 @@ const CheckboxList: React.FC<CheckboxListProps>  = ({data, setVideoId}) => {
   };
 
   return (
-    <List sx={{ width: '100%', maxWidth: '100%', maxHeight: '100px', bgcolor: 'background.paper' }}>
+    <List
+      sx={{
+        width: "100%",
+        maxWidth: "100%",
+        maxHeight: "100px",
+        bgcolor: "background.paper",
+      }}
+    >
       {data.map((video, index) => {
         const labelId = `checkbox-list-label-${index}`;
 
         return (
-          <ListItem
-            key={index}
-            disablePadding
-            className={'flexRowCenter'}
-          >
-            <Grid container className={'course_listItems'}>
+          <ListItem key={index} disablePadding className={"flexRowCenter"}>
+            <Grid container className={"course_listItems"}>
               <Grid xs={2}>
-                <ListItemButton 
-                  role={undefined} 
-                  onClick={handleToggle(index)} 
+                <ListItemButton
+                  role={undefined}
+                  onClick={handleToggle(index)}
                   dense
                 >
                   <ListItemIcon>
@@ -81,25 +82,25 @@ const CheckboxList: React.FC<CheckboxListProps>  = ({data, setVideoId}) => {
                       edge="start"
                       checked={checked.indexOf(index) !== -1}
                       tabIndex={-1}
-                      inputProps={{ 'aria-labelledby': labelId }}
-                      sx={{padding:0, margin: 0}}
+                      inputProps={{ "aria-labelledby": labelId }}
+                      sx={{ padding: 0, margin: 0 }}
                     />
                   </ListItemIcon>
                 </ListItemButton>
               </Grid>
               <Grid xs={8}>
-                <ListItemButton 
-                  role={undefined} 
-                  onClick={() => setVideoId(video.videoId)} 
+                <ListItemButton
+                  role={undefined}
+                  onClick={() => setVideoId(video.videoId)}
                   dense
                 >
                   <ListItemText id={labelId} primary={video.title} />
                 </ListItemButton>
               </Grid>
               <Grid xs={2}>
-                <ListItemButton 
-                  role={undefined} 
-                  onClick={handleToggle(index)} 
+                <ListItemButton
+                  role={undefined}
+                  onClick={handleToggle(index)}
                   dense
                 >
                   <ListItemIcon>
@@ -113,7 +114,7 @@ const CheckboxList: React.FC<CheckboxListProps>  = ({data, setVideoId}) => {
       })}
     </List>
   );
-}
+};
 
 const Course: React.FC = () => {
   const [data, setData] = React.useState([]);
@@ -126,16 +127,16 @@ const Course: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/video/videos", {
-          method: 'POST',
+        const response = await fetch(getVideos, {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({ courseId: courseId }),
         });
 
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
 
         const data = await response.json();
@@ -143,12 +144,12 @@ const Course: React.FC = () => {
         setData(data.videos);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, [courseId]); 
+  }, [courseId]);
 
   return (
     <Layout>

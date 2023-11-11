@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import Router from 'next/router';
-import Layout from '@/layout/layout';
 import Loader from "@/components/loader";
-import TextField from '@mui/material/TextField';
+import Layout from '@/layout/layout';
+import { Button, Stack, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import { Button, Stack, Typography } from '@mui/material';
+import TextField from '@mui/material/TextField';
 import Link from 'next/link';
+import Router from 'next/router';
+import React, { useState } from 'react';
+import { loginUser } from "../lib/config";
 
 interface SignInFormData {
   email: string;
@@ -45,31 +46,32 @@ const Register: React.FC = () => {
                 setEmailErrorMsg("");
             }
         }
-        if (field == 'password') {
-            if (value.trim() == "") {
-                setPasswordError(true);
-                setPasswordErrorMsg("password cannot be empty");
-            } else {
-                setPasswordError(false);
-                setPasswordErrorMsg("");
-            }
-        }
-    };
 
-    const checkFormValidity = (): boolean => {
-        let validity = true;
-        if (formState.email.trim() == "") {
-            setEmailError(true);
-            setEmailErrorMsg("Please enter email");
-            validity = false;
-        }
-        if (formState.password.trim() == "") {
-            setPasswordError(true);
-            setPasswordErrorMsg("Please enter password");
-            validity = false;
-        }
-        return validity;
+				if (field == "password") {
+					if (value.trim() == "") {
+						setPasswordError(true);
+						setPasswordErrorMsg("password cannot be empty");
+					} else {
+						setPasswordError(false);
+						setPasswordErrorMsg("");
+					}
+				}
+			};
+
+  const checkFormValidity = (): boolean => {
+    let validity = true;
+    if (formState.email.trim() == "") {
+      setEmailError(true);
+      setEmailErrorMsg("Please enter email");
+      validity = false;
     }
+    if (formState.password.trim() == "") {
+      setPasswordError(true);
+      setPasswordErrorMsg("Please enter password");
+      validity = false;
+    }
+    return validity;
+  };
 
 	const signinHandler = async () => {
 		try {
