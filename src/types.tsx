@@ -5,3 +5,8 @@ export interface User {
   courses: string[];
   token: string;
 }
+
+export interface Storage {
+  token: string | null;
+  expiryDate: string | null;
+}
