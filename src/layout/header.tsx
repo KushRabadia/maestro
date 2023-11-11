@@ -30,8 +30,11 @@ export default function Header() {
       .then((res) => {
         return res.json();
       })
-      .then((data) => console.log(data));
-  };
+      .then((data) => {
+        const courseId = data[0].courseId;
+        Router.push(`/course/${courseId}`);
+      });
+  }
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
