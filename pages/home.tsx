@@ -8,7 +8,6 @@ const Home: React.FC = () => {
   const [courses, setCourses] = React.useState<Course[]>([]);
 
   useEffect(() => {
-    console.log(getCourses);
     fetch(getCourses)
       .then((res) => {
         return res.json();
