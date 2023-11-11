@@ -150,9 +150,6 @@ const Register: React.FC = () => {
 			}
 
 			const resData = await response.json();
-			// Assuming that `login` and `Router` are available in your context
-			// Update this part based on your actual implementation
-			// this.props.dispatch(login(resData.user));
 			localStorage.setItem('token', resData.token);
 			const remainingMilliseconds = 60 * 60 * 1000;
 			const expiryDate = new Date(
