@@ -101,3 +101,13 @@ img {
     border-radius: 0;
     opacity: 0.5;
 }
+
+.carousel-container {
+    margin: 3rem 0;; /* Adjust the spacing between carousels */
+}
+
+.carousel-header {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1rem; /* Adjust the spacing between header and carousel */
+}
