@@ -1,4 +1,3 @@
-// src/store/reducers/userReducer.ts
 const initialState = {
   user: null,
 };

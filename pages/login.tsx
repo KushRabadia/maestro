@@ -8,6 +8,7 @@ import { Button, Stack, Typography } from '@mui/material';
 import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import { setUser } from '@/store/actions/userActions';
+import { User } from '@/types';
 
 interface SignInFormData {
   email: string;
@@ -101,7 +102,7 @@ const Register: React.FC = () => {
 			}
 
 			const resData = await response.json();
-			const userData = resData.user;
+			const userData: User = resData.user;
 			dispatch(setUser(userData));
 
 			const remainingMilliseconds = 60 * 60 * 1000;
