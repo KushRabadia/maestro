@@ -8,7 +8,6 @@ import Link from 'next/link';
 import Router from 'next/router';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { loginUser } from "../lib/config";
 
 interface SignInFormData {
   email: string;
@@ -23,42 +22,43 @@ const Register: React.FC = () => {
     password: "",
   });
 
-  const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(false);
 
   const [emailError, setEmailError] = useState<boolean>(false);
-  const [emailErrorMsg, setEmailErrorMsg] = useState<string>("");
+	const [emailErrorMsg, setEmailErrorMsg] = useState<string>("");
 
-  const [passwordError, setPasswordError] = useState<boolean>(false);
-  const [passwordErrorMsg, setPasswordErrorMsg] = useState<string>("");
+	const [passwordError, setPasswordError] = useState<boolean>(false);
+	const [passwordErrorMsg, setPasswordErrorMsg] = useState<string>("");
 
-  const handleChange =
-    (field: keyof SignInFormData) =>
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const value = event.target.value;
-      setFormState({
-        ...formState,
-        [field]: value,
-      });
+	const handleChange = (field: keyof SignInFormData) => (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const value = event.target.value
+        setFormState({
+            ...formState,
+            [field]: value,
+        });
 
-      if (field == "email") {
-        if (value.trim() == "") {
-          setEmailError(true);
-          setEmailErrorMsg("email cannot be empty");
-        } else {
-          setEmailError(false);
-          setEmailErrorMsg("");
+        if (field == 'email') {
+            if (value.trim() == "") {
+                setEmailError(true);
+                setEmailErrorMsg("email cannot be empty");
+            } else {
+                setEmailError(false);
+                setEmailErrorMsg("");
+            }
         }
-      }
-      if (field == "password") {
-        if (value.trim() == "") {
-          setPasswordError(true);
-          setPasswordErrorMsg("password cannot be empty");
-        } else {
-          setPasswordError(false);
-          setPasswordErrorMsg("");
-        }
-      }
-    };
+
+				if (field == "password") {
+					if (value.trim() == "") {
+						setPasswordError(true);
+						setPasswordErrorMsg("password cannot be empty");
+					} else {
+						setPasswordError(false);
+						setPasswordErrorMsg("");
+					}
+				}
+			};
 
   const checkFormValidity = (): boolean => {
     let validity = true;
@@ -78,7 +78,7 @@ const Register: React.FC = () => {
 	const signinHandler = async () => {
 		try {
 			setLoading(true);
-        if (emailError || passwordError || !checkFormValidity()) {
+      if (emailError || passwordError || !checkFormValidity()) {
 				return;
 			}
 			
@@ -169,7 +169,7 @@ const Register: React.FC = () => {
 							type="submit"
 							onClick={signinHandler}
 						>
-							Login
+							{loading ? <Loader replaceIcon={true} /> : "Login"}
 						</Button>
 					</Stack>
 				</Container>
