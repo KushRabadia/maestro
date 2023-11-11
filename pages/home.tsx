@@ -1,13 +1,14 @@
 import CarouselComponent, { Course } from "@/components/carousel";
 import React, { useEffect } from "react";
 import "react-multi-carousel/lib/styles.css";
-import Layout from "@/layout/layout";
+import Layout from "../src/layout/layout";
+import { getCourses } from "../lib/config";
 
 const Home: React.FC = () => {
   const [courses, setCourses] = React.useState<Course[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/course/courses")
+    fetch(getCourses)
       .then((res) => {
         return res.json();
       })
