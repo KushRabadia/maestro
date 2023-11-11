@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import Router from 'next/router';
 import Layout from '@/layout/layout';
-import TextField from '@mui/material/TextField';
+import { setUser } from '@/store/actions/userActions';
+import { Button, Stack, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import { Button, Stack, Typography } from '@mui/material';
+import TextField from '@mui/material/TextField';
 import Link from 'next/link';
+import Router from 'next/router';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setUser } from '@/store/actions/userActions';
+import { loginUser } from "../lib/config";
 
 interface SignInFormData {
   email: string;
@@ -16,67 +17,68 @@ interface SignInFormData {
 
 const Register: React.FC = () => {
 	const dispatch = useDispatch();
-	const [formState, setFormState] = useState<SignInFormData>({
-        email: '',
-        password: '',
-    });
 
-	const [loading, setLoading] = useState(false);
+  const [formState, setFormState] = useState<SignInFormData>({
+    email: "",
+    password: "",
+  });
 
-    const [emailError, setEmailError] = useState<boolean>(false);
-	const [emailErrorMsg, setEmailErrorMsg] = useState<string>("");
+  const [loading, setLoading] = useState(false);
 
-	const [passwordError, setPasswordError] = useState<boolean>(false);
-	const [passwordErrorMsg, setPasswordErrorMsg] = useState<string>("");
+  const [emailError, setEmailError] = useState<boolean>(false);
+  const [emailErrorMsg, setEmailErrorMsg] = useState<string>("");
 
-	const handleChange = (field: keyof SignInFormData) => (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        const value = event.target.value
-        setFormState({
-            ...formState,
-            [field]: value,
-        });
+  const [passwordError, setPasswordError] = useState<boolean>(false);
+  const [passwordErrorMsg, setPasswordErrorMsg] = useState<string>("");
 
-        if (field == 'email') {
-            if (value.trim() == "") {
-                setEmailError(true);
-                setEmailErrorMsg("email cannot be empty");
-            } else {
-                setEmailError(false);
-                setEmailErrorMsg("");
-            }
+  const handleChange =
+    (field: keyof SignInFormData) =>
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      setFormState({
+        ...formState,
+        [field]: value,
+      });
+
+      if (field == "email") {
+        if (value.trim() == "") {
+          setEmailError(true);
+          setEmailErrorMsg("email cannot be empty");
+        } else {
+          setEmailError(false);
+          setEmailErrorMsg("");
         }
-        if (field == 'password') {
-            if (value.trim() == "") {
-                setPasswordError(true);
-                setPasswordErrorMsg("password cannot be empty");
-            } else {
-                setPasswordError(false);
-                setPasswordErrorMsg("");
-            }
+      }
+      if (field == "password") {
+        if (value.trim() == "") {
+          setPasswordError(true);
+          setPasswordErrorMsg("password cannot be empty");
+        } else {
+          setPasswordError(false);
+          setPasswordErrorMsg("");
         }
+      }
     };
 
-    const checkFormValidity = (): boolean => {
-        let validity = true;
-        if (formState.email.trim() == "") {
-            setEmailError(true);
-            setEmailErrorMsg("Please enter email");
-            validity = false;
-        }
-        if (formState.password.trim() == "") {
-            setPasswordError(true);
-            setPasswordErrorMsg("Please enter password");
-            validity = false;
-        }
-        return validity;
+  const checkFormValidity = (): boolean => {
+    let validity = true;
+    if (formState.email.trim() == "") {
+      setEmailError(true);
+      setEmailErrorMsg("Please enter email");
+      validity = false;
     }
+    if (formState.password.trim() == "") {
+      setPasswordError(true);
+      setPasswordErrorMsg("Please enter password");
+      validity = false;
+    }
+    return validity;
+  };
 
 	const signinHandler = async () => {
 		try {
 			setLoading(true);
-            if (emailError || passwordError || !checkFormValidity()) {
+        if (emailError || passwordError || !checkFormValidity()) {
 				return;
 			}
 			
