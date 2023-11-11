@@ -93,11 +93,15 @@ img {
 .register_dataButton {
     text-transform: none;
     font-weight: bold;
-    display: block;
+    display: flex;
     margin: 0 auto;
+    align-items: center;
+    gap: 5px;
 }
 
 .register_textField {
     border-radius: 0;
     opacity: 0.5;
 }
+
+
