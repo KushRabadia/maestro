@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import Layout from "@/layout/layout";
 import { User } from '@/types';
+import { getCourses } from "../lib/config";
 
 const Home: React.FC = () => {
   const user: User | null = useSelector((state: RootState) => state.user).user;
@@ -13,7 +14,7 @@ const Home: React.FC = () => {
   const [userCourses, setUserCourses] = React.useState<Course[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/course/courses")
+    fetch(getCourses)
       .then((res) => {
         return res.json();
       })
