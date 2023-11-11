@@ -7,6 +7,9 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { Button, Stack, Typography } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { setUser } from '@/store/actions/userActions';
+import { User } from '@/types';
 
 interface SignUpFormData {
 	username: string;
@@ -16,6 +19,7 @@ interface SignUpFormData {
 }
 
 const Register: React.FC = () => {
+	const dispatch = useDispatch();
 	const [formState, setFormState] = useState<SignUpFormData>({
 		username: '',
 		email: '',
@@ -150,6 +154,9 @@ const Register: React.FC = () => {
 			}
 
 			const resData = await response.json();
+			const userData: User = resData.user;
+			dispatch(setUser(userData));
+
 			localStorage.setItem('token', resData.token);
 			const remainingMilliseconds = 60 * 60 * 1000;
 			const expiryDate = new Date(
