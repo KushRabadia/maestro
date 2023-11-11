@@ -1,5 +1,7 @@
 import Loader from "@/components/loader";
 import Layout from '@/layout/layout';
+import { setUser } from '@/store/actions/userActions';
+import { User } from '@/types';
 import { Button, Stack, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -7,6 +9,7 @@ import TextField from '@mui/material/TextField';
 import Link from 'next/link';
 import Router from 'next/router';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import validator from 'validator';
 import { createUser } from "../lib/config";
 
@@ -18,13 +21,14 @@ interface SignUpFormData {
 }
 
 const Register: React.FC = () => {
-  const [formState, setFormState] = useState<SignUpFormData>({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-  const [loading, setLoading] = useState(false);
+	const dispatch = useDispatch();
+	const [formState, setFormState] = useState<SignUpFormData>({
+		username: '',
+		email: '',
+		password: '',
+		confirmPassword: '',
+	});
+	const [loading, setLoading] = useState(false);
 
   const [usernameError, setUsernameError] = useState<boolean>(false);
   const [usernameErrorMsg, setUsernameErrorMsg] = useState<string>("");
@@ -161,21 +165,24 @@ const Register: React.FC = () => {
         }
       }
 
-      const resData = await response.json();
-      // Assuming that `login` and `Router` are available in your context
-      // Update this part based on your actual implementation
-      // this.props.dispatch(login(resData.user));
-      localStorage.setItem("token", resData.token);
-      const remainingMilliseconds = 60 * 60 * 1000;
-      const expiryDate = new Date(new Date().getTime() + remainingMilliseconds);
-      localStorage.setItem("expiryDate", expiryDate.toISOString());
-      Router.push("/home");
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+      
+			const resData = await response.json();
+			const userData: User = resData.user;
+			dispatch(setUser(userData));
+
+			localStorage.setItem('token', resData.token);
+			const remainingMilliseconds = 60 * 60 * 1000;
+			const expiryDate = new Date(
+				new Date().getTime() + remainingMilliseconds
+			);
+			localStorage.setItem('expiryDate', expiryDate.toISOString());
+			Router.push('/home');
+		} catch (err) {
+			console.error(err);
+		} finally {
+			setLoading(false);
+		}
+	};
 
   return (
     <Layout>

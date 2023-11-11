@@ -1,5 +1,7 @@
+import Loader from '@/components/loader';
 import Layout from '@/layout/layout';
 import { setUser } from '@/store/actions/userActions';
+import { User } from '@/types';
 import { Button, Stack, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -16,7 +18,6 @@ interface SignInFormData {
 
 const Register: React.FC = () => {
 	const dispatch = useDispatch();
-
   const [formState, setFormState] = useState<SignInFormData>({
     email: "",
     password: "",
@@ -103,7 +104,7 @@ const Register: React.FC = () => {
 			}
 
 			const resData = await response.json();
-			const userData = resData.user;
+			const userData: User = resData.user;
 			dispatch(setUser(userData));
 
 			const remainingMilliseconds = 60 * 60 * 1000;
