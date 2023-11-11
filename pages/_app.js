@@ -1,5 +1,7 @@
 import Head from "next/head";
 import { Fragment } from "react";
+import { Provider } from 'react-redux';
+import store from '@/store/store';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import "../styles/global.css";
 
@@ -24,12 +26,10 @@ theme = createTheme(theme, {
 
 function MyApp({ Component, pageProps }) {
   return (
-    <Fragment>
-      <Head>
-        <title>Maestro AI</title>
-      </Head>
+    <Provider store={store}>
+      <Head><title>Maestro AI</title></Head>
       <ThemeProvider theme={theme}><Component {...pageProps}/></ThemeProvider>
-    </Fragment>
+    </Provider>
   );
 }
 
