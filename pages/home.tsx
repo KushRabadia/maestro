@@ -19,7 +19,10 @@ const Home: React.FC = () => {
 
   return (
     <Layout>
-      <div className="margin-md">
+      <div
+        className="margin-m"
+        style={{ margin: "30px", paddingRight: "10px" }}
+      >
         <CarouselComponent data={courses} />
       </div>
     </Layout>

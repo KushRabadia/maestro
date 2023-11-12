@@ -63,8 +63,48 @@ img {
   padding: 0 20px;
 }
 
+/* Carousel css */
 .react-multiple-carousel__arrow {
   background-color: #8338ec !important;
+}
+
+/* .carousel {
+  padding: 30px;
+}
+
+.react-multiple-carousel__arrow--right {
+  position: absolute !important;
+  right: -25px !important;
+} */
+
+.react-multi-carousel-list {
+  position: unset !important;
+}
+
+.gd-carousel-wrapper {
+  width: 95% !important;
+  position: fixed !important;
+  /* margin: 0; */
+}
+
+@media screen and (max-width: 600px) {
+  .gd-carousel-wrapper {
+    width: 85% !important;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .gd-carousel-wrapper {
+    width: 93% !important;
+  }
+}
+
+.react-multiple-carousel__arrow--left {
+  left: -20px !important;
+}
+
+.react-multiple-carousel__arrow--right {
+  right: -20px !important;
 }
 
 .register_boxLayout {

@@ -24,7 +24,7 @@ interface CarouselComponentProps {
 
 const CarouselComponent: React.FC<CarouselComponentProps> = ({ data }) => {
   return (
-    <div className="imageListContainer flexRowCenter">
+    <div className="gd-carousel-wrapper">
       <Carousel
         additionalTransfrom={0}
         arrows
@@ -45,7 +45,7 @@ const CarouselComponent: React.FC<CarouselComponentProps> = ({ data }) => {
               max: 3000,
               min: 1024,
             },
-            items: 6,
+            items: 5,
             partialVisibilityGutter: 64,
           },
           mobile: {
@@ -61,7 +61,7 @@ const CarouselComponent: React.FC<CarouselComponentProps> = ({ data }) => {
               max: 1024,
               min: 464,
             },
-            items: 2,
+            items: 1,
             partialVisibilityGutter: 30,
           },
         }}
@@ -73,6 +73,7 @@ const CarouselComponent: React.FC<CarouselComponentProps> = ({ data }) => {
         sliderClass=""
         slidesToSlide={5}
         swipeable
+        className="gd-carousel"
       >
         {data.map((course, index) => (
           <div key={index}>
