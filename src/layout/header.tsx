@@ -88,7 +88,7 @@ export default function Header() {
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
       <MenuItem>
         <Link href="/login" className="text-link">
-          Login
+          {token ? "Logout" : "Login"}
         </Link>
       </MenuItem>
     </Menu>
