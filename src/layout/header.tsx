@@ -21,26 +21,25 @@ export default function Header() {
   const user = useSelector((state: RootState) => state.user);
   const { token } = useAuthToken();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
-    useState<null | HTMLElement>(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<null | HTMLElement>(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const [searchValue, setSearchValue] = useState<string>("");
+  const [searchValue, setSearchValue] = useState<string>('');
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const onSubmitSearch = (e: FormEvent) => {
-    setLoading(true)
+    setLoading(true);
     e.preventDefault();
-    const search_query = searchValue.split(" ").join("+");
+    const search_query = searchValue.split(' ').join('+');
     fetch(getYoutubeSearch + `?search_query=${search_query}`, {
-          method: 'GET',
-          headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + token 
-          },
-      })
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+    })
       .then((res) => {
         return res.json();
       })
@@ -49,7 +48,7 @@ export default function Header() {
         Router.push(`/course/${courseId}`);
         setLoading(false);
       });
-  }
+  };
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -68,19 +67,19 @@ export default function Header() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const menuId = "primary-search-account-menu";
+  const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
+        vertical: 'top',
+        horizontal: 'right',
       }}
       id={menuId}
       keepMounted
       transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
+        vertical: 'top',
+        horizontal: 'right',
       }}
       open={isMenuOpen}
       onClose={handleMenuClose}
@@ -95,19 +94,19 @@ export default function Header() {
     </Menu>
   );
 
-  const mobileMenuId = "primary-search-account-menu-mobile";
+  const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
+        vertical: 'top',
+        horizontal: 'right',
       }}
       id={mobileMenuId}
       keepMounted
       transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
+        vertical: 'top',
+        horizontal: 'right',
       }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
@@ -138,19 +137,14 @@ export default function Header() {
       <AppBar position="static">
         <Toolbar>
           <Link href="/home" className="text-link">
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ display: { xs: "none", sm: "block" } }}
-            >
+            <Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'block' } }}>
               MaestroAI
             </Typography>
           </Link>
           <form onSubmit={onSubmitSearch}>
             <SearchBar
               placeholder="Search for any topic"
-              inputProps={{ "aria-label": "search" }}
+              inputProps={{ 'aria-label': 'search' }}
               onChange={(e) => setSearchValue(e.target.value)}
               loading={loading}
               value={searchValue}

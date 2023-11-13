@@ -1,4 +1,4 @@
-import Loader from "@/components/loader";
+import Loader from '@/components/loader';
 import Layout from '@/layout/layout';
 import { setUser } from '@/store/actions/userActions';
 import { User } from '@/types';
@@ -11,7 +11,7 @@ import Router from 'next/router';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import validator from 'validator';
-import { createUser } from "../lib/config";
+import { createUser } from '../lib/config';
 
 interface SignUpFormData {
   username: string;
@@ -21,111 +21,107 @@ interface SignUpFormData {
 }
 
 const Register: React.FC = () => {
-	const dispatch = useDispatch();
-	const [formState, setFormState] = useState<SignUpFormData>({
-		username: '',
-		email: '',
-		password: '',
-		confirmPassword: '',
-	});
-	const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const [formState, setFormState] = useState<SignUpFormData>({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const [loading, setLoading] = useState(false);
 
   const [usernameError, setUsernameError] = useState<boolean>(false);
-  const [usernameErrorMsg, setUsernameErrorMsg] = useState<string>("");
+  const [usernameErrorMsg, setUsernameErrorMsg] = useState<string>('');
 
   const [emailError, setEmailError] = useState<boolean>(false);
-  const [emailErrorMsg, setEmailErrorMsg] = useState<string>("");
+  const [emailErrorMsg, setEmailErrorMsg] = useState<string>('');
 
   const [passwordError, setPasswordError] = useState<boolean>(false);
-  const [passwordErrorMsg, setPasswordErrorMsg] = useState<string>("");
+  const [passwordErrorMsg, setPasswordErrorMsg] = useState<string>('');
 
-  const [confirmPasswordError, setConfirmPasswordError] =
-    useState<boolean>(false);
-  const [confirmPasswordErrorMsg, setConfirmPasswordErrorMsg] =
-    useState<string>("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState<boolean>(false);
+  const [confirmPasswordErrorMsg, setConfirmPasswordErrorMsg] = useState<string>('');
 
-  const handleChange =
-    (field: keyof SignUpFormData) =>
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const value = event.target.value;
+  const handleChange = (field: keyof SignUpFormData) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
 
-      setFormState({
-        ...formState,
-        [field]: value,
-      });
+    setFormState({
+      ...formState,
+      [field]: value,
+    });
 
-      if (field == "username") {
-        if (value.trim() == "") {
-          setUsernameError(true);
-          setUsernameErrorMsg("Please enter username");
-        } else {
-          setUsernameError(false);
-          setUsernameErrorMsg("");
-        }
+    if (field == 'username') {
+      if (value.trim() == '') {
+        setUsernameError(true);
+        setUsernameErrorMsg('Please enter username');
+      } else {
+        setUsernameError(false);
+        setUsernameErrorMsg('');
       }
-      if (field == "email") {
-        if (value.trim() == "") {
-          setEmailError(true);
-          setEmailErrorMsg("please enter an email");
-        } else {
-          setEmailError(false);
-          setEmailErrorMsg("");
-        }
-
-        if (validator.isEmail(value)) {
-          setEmailError(false);
-          setEmailErrorMsg("");
-        } else {
-          setEmailError(true);
-          setEmailErrorMsg("please enter a valid email");
-        }
-      }
-      if (field == "password") {
-        if (value.length < 7) {
-          setPasswordError(true);
-          setPasswordErrorMsg("Use 6 characters or longer.");
-        } else {
-          setPasswordError(false);
-          setPasswordErrorMsg("");
-        }
+    }
+    if (field == 'email') {
+      if (value.trim() == '') {
+        setEmailError(true);
+        setEmailErrorMsg('please enter an email');
+      } else {
+        setEmailError(false);
+        setEmailErrorMsg('');
       }
 
-      if (
-        (field == "confirmPassword" && value != formState.password) ||
-        (field == "password" && value != formState.confirmPassword)
-      ) {
-        setConfirmPasswordError(true);
-        setConfirmPasswordErrorMsg("Passwords do not match.");
+      if (validator.isEmail(value)) {
+        setEmailError(false);
+        setEmailErrorMsg('');
+      } else {
+        setEmailError(true);
+        setEmailErrorMsg('please enter a valid email');
       }
-      if (
-        (field == "confirmPassword" && value == formState.password) ||
-        (field == "password" && value == formState.confirmPassword)
-      ) {
-        setConfirmPasswordError(false);
-        setConfirmPasswordErrorMsg("");
+    }
+    if (field == 'password') {
+      if (value.length < 7) {
+        setPasswordError(true);
+        setPasswordErrorMsg('Use 6 characters or longer.');
+      } else {
+        setPasswordError(false);
+        setPasswordErrorMsg('');
       }
-    };
+    }
+
+    if (
+      (field == 'confirmPassword' && value != formState.password) ||
+      (field == 'password' && value != formState.confirmPassword)
+    ) {
+      setConfirmPasswordError(true);
+      setConfirmPasswordErrorMsg('Passwords do not match.');
+    }
+    if (
+      (field == 'confirmPassword' && value == formState.password) ||
+      (field == 'password' && value == formState.confirmPassword)
+    ) {
+      setConfirmPasswordError(false);
+      setConfirmPasswordErrorMsg('');
+    }
+  };
 
   const checkFormValidity = (): boolean => {
     let validity = true;
-    if (formState.username.trim() == "") {
+    if (formState.username.trim() == '') {
       setUsernameError(true);
-      setUsernameErrorMsg("Please enter username");
+      setUsernameErrorMsg('Please enter username');
       validity = false;
     }
-    if (formState.email.trim() == "") {
+    if (formState.email.trim() == '') {
       setEmailError(true);
-      setEmailErrorMsg("Please enter email");
+      setEmailErrorMsg('Please enter email');
       validity = false;
     }
-    if (formState.password.trim() == "") {
+    if (formState.password.trim() == '') {
       setPasswordError(true);
-      setPasswordErrorMsg("Please enter password");
+      setPasswordErrorMsg('Please enter password');
       validity = false;
     }
-    if (formState.confirmPassword.trim() == "") {
+    if (formState.confirmPassword.trim() == '') {
       setConfirmPasswordError(true);
-      setConfirmPasswordErrorMsg("Please enter confirmPassword");
+      setConfirmPasswordErrorMsg('Please enter confirmPassword');
       validity = false;
     }
     return validity;
@@ -134,23 +130,17 @@ const Register: React.FC = () => {
   const signupHandler = async () => {
     try {
       setLoading(true);
-      if (
-        usernameError ||
-        emailError ||
-        passwordError ||
-        confirmPasswordError ||
-        !checkFormValidity()
-      ) {
+      if (usernameError || emailError || passwordError || confirmPasswordError || !checkFormValidity()) {
         return;
       }
 
       const bodyFormData = new FormData();
-      bodyFormData.append("email", formState.email);
-      bodyFormData.append("password", formState.password);
-      bodyFormData.append("name", formState.username);
+      bodyFormData.append('email', formState.email);
+      bodyFormData.append('password', formState.password);
+      bodyFormData.append('name', formState.username);
 
       const response = await fetch(createUser, {
-        method: "POST",
+        method: 'POST',
         body: bodyFormData,
       });
 
@@ -158,39 +148,36 @@ const Register: React.FC = () => {
         const resData = await response.json();
         if (response.status === 401 || response.status === 422) {
           console.log(resData.message);
-          throw new Error("Validation failed.");
+          throw new Error('Validation failed.');
         } else {
-          console.log("Error!");
-          throw new Error("Creating a user failed!");
+          console.log('Error!');
+          throw new Error('Creating a user failed!');
         }
       }
 
-      
-			const resData = await response.json();
-			const userData: User = resData.user;
-			dispatch(setUser(userData));
+      const resData = await response.json();
+      const userData: User = resData.user;
+      dispatch(setUser(userData));
 
-			localStorage.setItem('token', resData.token);
-			const remainingMilliseconds = 60 * 60 * 1000;
-			const expiryDate = new Date(
-				new Date().getTime() + remainingMilliseconds
-			);
-			localStorage.setItem('expiryDate', expiryDate.toISOString());
-			Router.push('/home');
-		} catch (err) {
-			console.error(err);
-		} finally {
-			setLoading(false);
-		}
-	};
+      localStorage.setItem('token', resData.token);
+      const remainingMilliseconds = 60 * 60 * 1000;
+      const expiryDate = new Date(new Date().getTime() + remainingMilliseconds);
+      localStorage.setItem('expiryDate', expiryDate.toISOString());
+      Router.push('/home');
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Layout>
       <Container maxWidth="sm">
-        <Box className={"register_boxLayout"}>
+        <Box className={'register_boxLayout'}>
           <Link href="/login">
             <Button
-              className={"register_pageButton"}
+              className={'register_pageButton'}
               sx={{
                 opacity: 0.5,
               }}
@@ -199,7 +186,7 @@ const Register: React.FC = () => {
             </Button>
           </Link>
           <Link href="/register">
-            <Button className={"register_pageButton"}>Register</Button>
+            <Button className={'register_pageButton'}>Register</Button>
           </Link>
         </Box>
 
@@ -214,7 +201,7 @@ const Register: React.FC = () => {
               variant="outlined"
               required
               className="register_textField"
-              onChange={handleChange("username")}
+              onChange={handleChange('username')}
               value={formState.username}
             />
             <TextField
@@ -226,7 +213,7 @@ const Register: React.FC = () => {
               required
               className="register_textField"
               type="email"
-              onChange={handleChange("email")}
+              onChange={handleChange('email')}
               value={formState.email}
             />
             <TextField
@@ -238,7 +225,7 @@ const Register: React.FC = () => {
               type="password"
               required
               className="register_textField"
-              onChange={handleChange("password")}
+              onChange={handleChange('password')}
               value={formState.password}
             />
             <TextField
@@ -250,16 +237,11 @@ const Register: React.FC = () => {
               type="password"
               required
               className="register_textField"
-              onChange={handleChange("confirmPassword")}
+              onChange={handleChange('confirmPassword')}
               value={formState.confirmPassword}
             />
-            <Button
-              variant="contained"
-              className="register_dataButton"
-              type="submit"
-              onClick={signupHandler}
-            >
-              {loading ? <Loader replaceIcon={true} /> : "Register"}
+            <Button variant="contained" className="register_dataButton" type="submit" onClick={signupHandler}>
+              {loading ? <Loader replaceIcon={true} /> : 'Register'}
             </Button>
           </Stack>
         </Container>
