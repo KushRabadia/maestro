@@ -1,12 +1,12 @@
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import IconButton from "@mui/material/IconButton";
-import ImageListItem from "@mui/material/ImageListItem";
-import ImageListItemBar from "@mui/material/ImageListItemBar";
-import Link from "@mui/material/Link";
-import React from "react";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
-import Image from "next/image";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import IconButton from '@mui/material/IconButton';
+import ImageListItem from '@mui/material/ImageListItem';
+import ImageListItemBar from '@mui/material/ImageListItemBar';
+import Link from '@mui/material/Link';
+import React from 'react';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
+import Image from 'next/image';
 
 export interface Course {
   _id: string;
@@ -84,17 +84,14 @@ const CarouselComponent: React.FC<CarouselComponentProps> = ({ data }) => {
                 className="card"
                 width={400}
                 height={200}
-                style={{ width: "100%", height: "217px" }}
+                style={{ width: '100%', height: '217px' }}
               />
 
               <ImageListItemBar
                 title={course.title}
                 subtitle={course.author}
                 actionIcon={
-                  <IconButton
-                    sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-                    aria-label={`info about ${course.title}`}
-                  >
+                  <IconButton sx={{ color: 'rgba(255, 255, 255, 0.54)' }} aria-label={`info about ${course.title}`}>
                     <Link href={`/course/${course._id}`} className="text-link">
                       <ArrowForwardIcon />
                     </Link>

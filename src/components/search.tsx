@@ -1,4 +1,4 @@
-import Loader from "@/components/loader";
+import Loader from '@/components/loader';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
@@ -59,9 +59,7 @@ const SearchBar: React.FC<SearchProps> = (props) => {
 
   return (
     <Search>
-      <SearchIconWrapper>
-        {loading ? <Loader replaceIcon={true} /> : <SearchIcon />}
-      </SearchIconWrapper>
+      <SearchIconWrapper>{loading ? <Loader replaceIcon={true} /> : <SearchIcon />}</SearchIconWrapper>
       <StyledInputBase
         placeholder={placeholder}
         onChange={onChange}

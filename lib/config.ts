@@ -1,9 +1,9 @@
 export const serverPath = process.env.NEXT_PUBLIC_BACKEND_SERVER_URL;
 //Add base paths
-export const videoPath: string = "/video";
-export const userPath: string = "/user";
-export const coursePath: string = "/course";
-export const youtubePath: string = "/youtube";
+export const videoPath: string = '/video';
+export const userPath: string = '/user';
+export const coursePath: string = '/course';
+export const youtubePath: string = '/youtube';
 
 //Add trailing paths (URI)
 export const getVideos: string = `${serverPath}${videoPath}/videos`;

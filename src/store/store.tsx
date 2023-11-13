@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { createWrapper, HYDRATE } from "next-redux-wrapper";
+import { createWrapper, HYDRATE } from 'next-redux-wrapper';
 import userReducer from './reducers/userReducer';
 import { User } from '@/types';
 
