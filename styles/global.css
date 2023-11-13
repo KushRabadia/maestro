@@ -1,6 +1,6 @@
 /* Reset default margin and padding */
 
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 body,
 h1,
@@ -105,28 +105,28 @@ img {
 }
 
 .carousel-container {
-    margin: 3rem 0;; /* Adjust the spacing between carousels */
+  margin: 3rem 0; /* Adjust the spacing between carousels */
 }
 
 .carousel-header {
-    font-size: 2rem;
-    color: #333;
-    margin-bottom: 1rem; /* Adjust the spacing between header and carousel */
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 1rem; /* Adjust the spacing between header and carousel */
 }
 .course_listItems {
-    text-align: center;
-    padding: 5px;
-    border-bottom: 1px solid black;
+  text-align: center;
+  padding: 5px;
+  border-bottom: 1px solid black;
 }
 
-.loader_circle{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
+.loader_circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
-.circular_progress{
-    color: aliceblue;
-    size: small;
+.circular_progress {
+  color: aliceblue;
+  size: small;
 }

@@ -1,12 +1,12 @@
-import CarouselComponent, { Course } from "@/components/carousel";
-import Loader from "@/components/loader";
-import React, { useEffect } from "react";
-import "react-multi-carousel/lib/styles.css";
+import CarouselComponent, { Course } from '@/components/carousel';
+import Loader from '@/components/loader';
+import React, { useEffect } from 'react';
+import 'react-multi-carousel/lib/styles.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import Layout from "@/layout/layout";
+import Layout from '@/layout/layout';
 import { User } from '@/types';
-import { getCourses } from "../lib/config";
+import { getCourses } from '../lib/config';
 
 const Home: React.FC = () => {
   const user: User | null = useSelector((state: RootState) => state.user).user;
@@ -23,9 +23,7 @@ const Home: React.FC = () => {
       .then((data) => {
         setCourses(data.courses);
         if (user?.courses) {
-          const userCourses = courses.filter(
-            (course) => user?.courses.includes(course._id)
-          );
+          const userCourses = courses.filter((course) => user?.courses.includes(course._id));
           setUserCourses(userCourses);
         }
       });
@@ -33,7 +31,9 @@ const Home: React.FC = () => {
 
   return (
     <Layout>
-      {loading ? <Loader /> : (
+      {loading ? (
+        <Loader />
+      ) : (
         <div className="margin-md">
           <div className="carousel-container">
             <h2 className="carousel-header">Your Courses</h2>

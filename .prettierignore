@@ -1,0 +1,16 @@
+*.*
+!*.css
+!*.html
+!*.js
+!*.json
+!*.jsx
+!*.less
+!*.md
+!*.mdx
+!*.ts
+!*.tsx
+!*.yml
+
+node_modules
+dist
+target
