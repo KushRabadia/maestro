@@ -6,6 +6,7 @@ import { wrapper } from '@/store/store';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { setUser } from '@/store/actions/userActions';
 import { User } from '@/types';
+import { getUserDetails } from '../lib/config';
 import '../styles/global.css';
 
 let theme = createTheme({
@@ -39,7 +40,7 @@ function MyApp({ Component, ...rest }: AppProps) {
     const initializeApp = async () => {
       if (storedToken) {
         try {
-          const response = await fetch('http://localhost:8000/api/user/details', {
+          const response = await fetch(getUserDetails, {
             method: 'GET',
             headers: {
               Authorization: `Bearer ${storedToken}`,
