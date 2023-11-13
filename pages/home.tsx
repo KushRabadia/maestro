@@ -2,7 +2,7 @@ import CarouselComponent, { Course } from '@/components/carousel';
 import Loader from '@/components/loader';
 import React, { useEffect } from 'react';
 import 'react-multi-carousel/lib/styles.css';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import Layout from '@/layout/layout';
 import { User } from '@/types';
@@ -36,10 +36,10 @@ const Home: React.FC = () => {
         <Loader />
       ) : (
         <div className="margin-md">
-          <div className="carousel-container">
+          {user?.courses && <div className="carousel-container">
             <h2 className="carousel-header">Your Courses</h2>
             <CarouselComponent data={userCourses} />
-          </div>
+          </div>}
           <div className="carousel-container">
             <h2 className="carousel-header">What Others Are Learning</h2>
             <CarouselComponent data={courses} />
