@@ -1,13 +1,13 @@
-import { useEffect } from "react";
-import Head from "next/head";
+import { useEffect } from 'react';
+import Head from 'next/head';
 import { AppProps } from 'next/app';
 import { Provider, useDispatch } from 'react-redux';
-import { wrapper } from "@/store/store";
+import { wrapper } from '@/store/store';
 import store from '@/store/store';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { setUser } from '@/store/actions/userActions';
 import { useAuthToken } from '@/utils/auth';
-import "../styles/global.css";
+import '../styles/global.css';
 
 let theme = createTheme({
   palette: {
@@ -32,7 +32,7 @@ function MyApp({ Component, ...rest }: AppProps) {
   const { store, props } = wrapper.useWrappedStore(rest);
   const { pageProps } = props;
   const { token, expiryDate } = useAuthToken();
-  
+
   useEffect(() => {
     const initializeApp = async () => {
       if (token && expiryDate) {
@@ -49,7 +49,7 @@ function MyApp({ Component, ...rest }: AppProps) {
                 Authorization: `Bearer ${token}`,
               },
             });
-  
+
             if (response) {
               const responseData = await response.json();
               store.dispatch(setUser(responseData.user));
@@ -75,8 +75,12 @@ function MyApp({ Component, ...rest }: AppProps) {
 
   return (
     <Provider store={store}>
-      <Head><title>Maestro AI</title></Head>
-      <ThemeProvider theme={theme}><Component {...pageProps}/></ThemeProvider>
+      <Head>
+        <title>Maestro AI</title>
+      </Head>
+      <ThemeProvider theme={theme}>
+        <Component {...pageProps} />
+      </ThemeProvider>
     </Provider>
   );
 }
