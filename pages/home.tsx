@@ -2,7 +2,7 @@ import CarouselComponent, { Course } from '@/components/carousel';
 import Loader from '@/components/loader';
 import React, { useEffect } from 'react';
 import 'react-multi-carousel/lib/styles.css';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store/store';
 import Layout from '@/layout/layout';
 import { User } from '@/types';
@@ -22,12 +22,13 @@ const Home: React.FC = () => {
       })
       .then((data) => {
         setCourses(data.courses);
+        setLoading(false);
         if (user?.courses) {
-          const userCourses = courses.filter((course) => user?.courses.includes(course._id));
+          const userCourses = data.courses.filter((course: Course) => user?.courses.includes(course._id));
           setUserCourses(userCourses);
         }
       });
-  }, []);
+  }, [user]);
 
   return (
     <Layout>
