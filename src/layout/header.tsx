@@ -1,5 +1,6 @@
+import Alert from '@/components/alert';
 import SearchBar from '@/components/search';
-import { RootState } from '@/store/store';
+import { setUser } from '@/store/actions/userActions';
 import { useAuthToken } from '@/utils/auth';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
@@ -11,15 +12,20 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import { User } from '@/types';
 import Link from 'next/link';
 import Router from 'next/router';
-import React, { FormEvent, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { FormEvent, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 import { getYoutubeSearch } from '../../lib/config';
 
 export default function Header() {
-  const user = useSelector((state: RootState) => state.user);
-  const { token } = useAuthToken();
+  const dispatch = useDispatch();
+  const user: User | null = useSelector((state: RootState) => state.user).user;
+  const [refreshToken, setRefreshToken] = useState<boolean>(false);
+  const { token } = useAuthToken({refresh: refreshToken});
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -27,7 +33,8 @@ export default function Header() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const [searchValue, setSearchValue] = useState<string>('');
-  const [loading, setLoading] = React.useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
 
   const onSubmitSearch = (e: FormEvent) => {
     setLoading(true);
@@ -63,9 +70,25 @@ export default function Header() {
     handleMobileMenuClose();
   };
 
+  const handleSignOut = () => {
+    setShowAlert(true);
+    dispatch(setUser(null));
+    localStorage.removeItem('token');
+    localStorage.removeItem('expiryDate');
+    setRefreshToken((prev) => !prev);
+  };
+
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowAlert(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [showAlert]);
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -84,13 +107,18 @@ export default function Header() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
+      {user && <MenuItem sx={{ pointerEvents: 'none', borderBottom: '1px solid' }}><b>{user.name}</b></MenuItem>}
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem>
-        <Link href="/login" className="text-link">
-          {token ? "Logout" : "Login"}
-        </Link>
-      </MenuItem>
+      {token ? (
+        <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
+      ) : (
+        <MenuItem>
+          <Link href="/login" className="text-link">
+            Login
+          </Link>
+        </MenuItem>
+      )}
     </Menu>
   );
 
@@ -183,6 +211,7 @@ export default function Header() {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      {<Alert severity="success" message={'You Have Signed Out Successfully!'} visible={showAlert} />}
     </Box>
   );
 }

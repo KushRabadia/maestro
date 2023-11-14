@@ -13,6 +13,7 @@ export const createUser: string = `${serverPath}${userPath}/create`;
 export const loginUser: string = `${serverPath}${userPath}/login`;
 export const loginSocial: string = `${serverPath}${userPath}/login/social`;
 export const verifyToken: string = `${serverPath}${userPath}/verify/:token`;
+export const getUserDetails: string = `${serverPath}${userPath}/details`;
 
 export const createCourse: string = `${serverPath}${coursePath}`;
 export const getCourses: string = `${serverPath}${coursePath}/courses`;
