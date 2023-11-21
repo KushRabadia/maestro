@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import Head from 'next/head';
 import { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
+import { SessionProvider } from "next-auth/react";
 import { wrapper } from '@/store/store';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { setUser } from '@/store/actions/userActions';
@@ -31,6 +32,7 @@ theme = createTheme(theme, {
 
 function MyApp({ Component, ...rest }: AppProps) {
   const storedToken = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  const expiryDate = typeof window !== 'undefined' ? localStorage.getItem('expiryDate') : null;
   const { store, props } = wrapper.useWrappedStore(rest);
   const { pageProps } = props;
 
@@ -39,6 +41,17 @@ function MyApp({ Component, ...rest }: AppProps) {
 
     const initializeApp = async () => {
       if (storedToken) {
+        if (expiryDate) {
+          const currentTimestamp = Date.now();
+          const expiryTimestamp = new Date(expiryDate).getTime();
+  
+          if (expiryTimestamp > currentTimestamp) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('expiryDate');
+            return;
+          }
+        }
+
         try {
           const response = await fetch(getUserDetails, {
             method: 'GET',
@@ -70,15 +83,25 @@ function MyApp({ Component, ...rest }: AppProps) {
   }, [store, storedToken]);
 
   return (
-    <Provider store={store}>
-      <Head>
-        <title>Maestro AI</title>
-      </Head>
-      <ThemeProvider theme={theme}>
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </Provider>
+    <SessionProvider session={pageProps.session}>
+      <Provider store={store}>
+        <Head>
+          <title>Maestro AI</title>
+        </Head>
+        <ThemeProvider theme={theme}>
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </Provider>
+    </SessionProvider>
   );
 }
 
 export default MyApp;
+
+// export async function getServerSideProps({ req, res }) {
+//   return {
+//     props: {
+//       session: await getServerSession(req, res, authOptions)
+//     }
+//   }
+// }
