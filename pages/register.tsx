@@ -6,6 +6,8 @@ import { Button, Stack, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
+import GoogleIcon from '@mui/icons-material/Google';
+import { signIn } from "next-auth/react";
 import Link from 'next/link';
 import Router from 'next/router';
 import React, { useState } from 'react';
@@ -242,6 +244,10 @@ const Register: React.FC = () => {
             />
             <Button variant="contained" className="register_dataButton" type="submit" onClick={signupHandler}>
               {loading ? <Loader replaceIcon={true} /> : 'Register'}
+            </Button>
+            <Button variant="contained" className="register_google" onClick={() => signIn("google", { callbackUrl: '/home' })}>
+              <GoogleIcon />
+              Register with Google
             </Button>
           </Stack>
         </Container>

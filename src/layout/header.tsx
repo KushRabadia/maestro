@@ -15,6 +15,7 @@ import Typography from '@mui/material/Typography';
 import { User } from '@/types';
 import Link from 'next/link';
 import Router from 'next/router';
+import { useSession, signOut } from "next-auth/react";
 import React, { FormEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
@@ -22,6 +23,7 @@ import { getYoutubeSearch } from '../../lib/config';
 
 export default function Header() {
   const dispatch = useDispatch();
+  const { data: session } = useSession()
   const user: User | null = useSelector((state: RootState) => state.user).user;
   const [refreshToken, setRefreshToken] = useState<boolean>(false);
   const { token } = useAuthToken({refresh: refreshToken});
@@ -40,21 +42,23 @@ export default function Header() {
     setLoading(true);
     e.preventDefault();
     const search_query = searchValue.split(' ').join('+');
-    fetch(getYoutubeSearch + `?search_query=${search_query}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token,
-      },
-    })
-      .then((res) => {
-        return res.json();
+    if (token) {
+      fetch(getYoutubeSearch + `?search_query=${search_query}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token,
+        },
       })
-      .then((data) => {
-        const courseId = data[0].courseId;
-        Router.push(`/course/${courseId}`);
-        setLoading(false);
-      });
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          const courseId = data[0].courseId;
+          Router.push(`/course/${courseId}`);
+          setLoading(false);
+        });
+    }
   };
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -72,6 +76,9 @@ export default function Header() {
 
   const handleSignOut = () => {
     setShowAlert(true);
+    if (session) {
+      signOut({ redirect: false });
+    }
     dispatch(setUser(null));
     localStorage.removeItem('token');
     localStorage.removeItem('expiryDate');
@@ -89,6 +96,10 @@ export default function Header() {
 
     return () => clearTimeout(timer);
   }, [showAlert]);
+
+  useEffect(() => {
+    setRefreshToken((prev) => !prev);
+  }, [user]);
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -110,7 +121,7 @@ export default function Header() {
       {user && <MenuItem sx={{ pointerEvents: 'none', borderBottom: '1px solid' }}><b>{user.name}</b></MenuItem>}
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      {token ? (
+      {user ? (
         <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
       ) : (
         <MenuItem>
