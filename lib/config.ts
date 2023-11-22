@@ -10,6 +10,7 @@ export const getVideos: string = `${serverPath}${videoPath}/videos`;
 export const createVideo: string = `${serverPath}${videoPath}`;
 
 export const createUser: string = `${serverPath}${userPath}/create`;
+export const updateUser: string = `${serverPath}${userPath}/update`;
 export const loginUser: string = `${serverPath}${userPath}/login`;
 export const loginSocial: string = `${serverPath}${userPath}/login/social`;
 export const verifyToken: string = `${serverPath}${userPath}/verify/:token`;
