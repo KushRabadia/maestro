@@ -43,7 +43,7 @@ export default function Header() {
       setLoading(true);
       if (status === "loading" || !session) return;
       const { email, name } = session.user || {};
-      if (email && name && !user) {
+      if (email && name && !user && !token) {
         const bodyFormData = new FormData();
         bodyFormData.append('email', email);
         bodyFormData.append('name', name);
