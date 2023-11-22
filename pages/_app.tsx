@@ -80,7 +80,7 @@ function MyApp({ Component, ...rest }: AppProps) {
     };
 
     initializeApp();
-  }, [store, storedToken]);
+  }, [expiryDate, store, storedToken]);
 
   return (
     <SessionProvider session={pageProps.session}>

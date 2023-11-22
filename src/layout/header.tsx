@@ -16,14 +16,14 @@ import { User } from '@/types';
 import Link from 'next/link';
 import Router from 'next/router';
 import { useSession, signOut } from "next-auth/react";
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { getYoutubeSearch } from '../../lib/config';
+import { getYoutubeSearch, loginSocial } from '../../lib/config';
 
 export default function Header() {
   const dispatch = useDispatch();
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const user: User | null = useSelector((state: RootState) => state.user).user;
   const [refreshToken, setRefreshToken] = useState<boolean>(false);
   const { token } = useAuthToken({refresh: refreshToken});
@@ -37,6 +37,54 @@ export default function Header() {
   const [searchValue, setSearchValue] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [showAlert, setShowAlert] = useState<boolean>(false);
+
+  const signinHandler = useCallback(async () => {
+    try {
+      setLoading(true);
+      if (status === "loading" || !session) return;
+      const { email, name } = session.user || {};
+      if (email && name && !user) {
+        const bodyFormData = new FormData();
+        bodyFormData.append('email', email);
+        bodyFormData.append('name', name);
+
+        const response = await fetch(loginSocial, {
+          method: 'POST',
+          body: bodyFormData
+        });
+
+        if (!response.ok) {
+          const resData = await response.json();
+          if (response.status === 401 || response.status === 422) {
+            console.log(resData.message);
+            throw new Error('Validation failed.');
+          } else {
+            console.log('Error!');
+            throw new Error('Validation failed!');
+          }
+        }
+  
+        const resData = await response.json();
+        const userData: User = resData.user;
+        dispatch(setUser(userData));
+  
+        const remainingMilliseconds = 60 * 60 * 1000;
+        const expiryDate = new Date(new Date().getTime() + remainingMilliseconds);
+        localStorage.setItem('token', resData.token);
+        localStorage.setItem('expiryDate', expiryDate.toISOString());
+      } else {
+        return;
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [dispatch, session, status, user]);
+
+  useEffect(() => {
+    signinHandler();
+  }, [signinHandler]);
 
   const onSubmitSearch = (e: FormEvent) => {
     setLoading(true);

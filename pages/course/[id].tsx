@@ -8,10 +8,15 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Grid from '@mui/material/Unstable_Grid2';
+import { setUser } from '@/store/actions/userActions';
 import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { User } from '@/types';
+import { useAuthToken } from '@/utils/auth';
 import React, { useEffect, useState } from 'react';
 import YouTube, { YouTubeProps } from 'react-youtube';
-import { getVideos } from '../../lib/config';
+import { getVideos, updateUser } from '../../lib/config';
 
 interface VideoItem {
   videoId: string;
@@ -105,11 +110,15 @@ const CheckboxList: React.FC<CheckboxListProps> = ({ data, setVideoId }) => {
 };
 
 const Course: React.FC = () => {
-  const [data, setData] = React.useState([]);
-  const [videoId, setVideoId] = React.useState('');
-  const [loading, setLoading] = React.useState<Boolean>(true);
+  const dispatch = useDispatch();
+  const user: User | null = useSelector((state: RootState) => state.user).user;
+  const [data, setData] = useState([]);
+  const [videoId, setVideoId] = useState('');
+  const [loading, setLoading] = useState<Boolean>(true);
   const router = useRouter();
-  const courseId = router.query.id;
+  const [refreshToken, setRefreshToken] = useState<boolean>(false);
+  const { token } = useAuthToken({refresh: refreshToken});
+  const courseId: string = Array.isArray(router.query.id) ? router.query.id[0] : (router.query.id || '');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -135,8 +144,40 @@ const Course: React.FC = () => {
       }
     };
 
-    fetchData();
+    if (courseId !== '') fetchData();
   }, [courseId]);
+
+  useEffect(() => {
+    const updateUserCourses = async () => {
+      try {
+        const response = await fetch(updateUser, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token
+          },
+          body: JSON.stringify({ courseId: courseId }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        const userData: User = data.user;
+        console.log(userData);
+        dispatch(setUser(userData));
+        
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    if (user && courseId !== '' && token) {
+      const isCourseThere = user.courses.includes(courseId);
+      if (!isCourseThere) updateUserCourses();
+    }
+  }, [user, courseId, token, dispatch]);
 
   return (
     <Layout>
