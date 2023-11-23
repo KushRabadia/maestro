@@ -165,7 +165,6 @@ const Course: React.FC = () => {
 
         const data = await response.json();
         const userData: User = data.user;
-        console.log(userData);
         dispatch(setUser(userData));
         
       } catch (error) {
