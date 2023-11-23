@@ -2,13 +2,16 @@ import Loader from '@/components/loader';
 import Layout from '@/layout/layout';
 import { setUser } from '@/store/actions/userActions';
 import { User } from '@/types';
-import { Button, Stack, Typography } from '@mui/material';
+import { Button, IconButton, Stack, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
+import GoogleIcon from '@mui/icons-material/Google';
+import { loginUser } from '../lib/config';
+import { signIn } from "next-auth/react";
 import Link from 'next/link';
 import Router from 'next/router';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 interface SignInFormData {
@@ -77,6 +80,7 @@ const Register: React.FC = () => {
   const signinHandler = async () => {
     try {
       setLoading(true);
+
       if (emailError || passwordError || !checkFormValidity()) {
         return;
       }
@@ -85,7 +89,7 @@ const Register: React.FC = () => {
       bodyFormData.append('email', formState.email);
       bodyFormData.append('password', formState.password);
 
-      const response = await fetch('http://localhost:8000/api/user/login', {
+      const response = await fetch(loginUser, {
         method: 'POST',
         body: bodyFormData,
       });
@@ -116,6 +120,7 @@ const Register: React.FC = () => {
       setLoading(false);
     }
   };
+
   return (
     <Layout>
       <Container maxWidth="sm">
@@ -137,7 +142,6 @@ const Register: React.FC = () => {
             <TextField
               error={emailError}
               helperText={emailErrorMsg}
-              id="standard-basic"
               label="Email Address"
               variant="outlined"
               required
@@ -149,7 +153,6 @@ const Register: React.FC = () => {
             <TextField
               error={passwordError}
               helperText={passwordErrorMsg}
-              id="standard-basic"
               label="Password"
               variant="outlined"
               required
@@ -161,6 +164,10 @@ const Register: React.FC = () => {
 
             <Button variant="contained" className="register_dataButton" type="submit" onClick={signinHandler}>
               {loading ? <Loader replaceIcon={true} /> : 'Login'}
+            </Button>
+            <Button variant="contained" className="register_google" onClick={() => signIn("google", { callbackUrl: '/home' })}>
+              <GoogleIcon />
+              Sign in with Google
             </Button>
           </Stack>
         </Container>
