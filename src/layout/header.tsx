@@ -15,13 +15,15 @@ import Typography from '@mui/material/Typography';
 import { User } from '@/types';
 import Link from 'next/link';
 import Router from 'next/router';
-import React, { FormEvent, useEffect, useState } from 'react';
+import { useSession, signOut } from "next-auth/react";
+import React, { FormEvent, useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { getYoutubeSearch } from '../../lib/config';
+import { getYoutubeSearch, loginSocial } from '../../lib/config';
 
 export default function Header() {
   const dispatch = useDispatch();
+  const { data: session, status } = useSession()
   const user: User | null = useSelector((state: RootState) => state.user).user;
   const [refreshToken, setRefreshToken] = useState<boolean>(false);
   const { token } = useAuthToken({refresh: refreshToken});
@@ -36,25 +38,75 @@ export default function Header() {
   const [loading, setLoading] = useState<boolean>(false);
   const [showAlert, setShowAlert] = useState<boolean>(false);
 
+  const signinHandler = useCallback(async () => {
+    try {
+      setLoading(true);
+      if (status === "loading" || !session) return;
+      const { email, name } = session.user || {};
+      if (email && name && !user && !token) {
+        const bodyFormData = new FormData();
+        bodyFormData.append('email', email);
+        bodyFormData.append('name', name);
+
+        const response = await fetch(loginSocial, {
+          method: 'POST',
+          body: bodyFormData
+        });
+
+        if (!response.ok) {
+          const resData = await response.json();
+          if (response.status === 401 || response.status === 422) {
+            console.log(resData.message);
+            throw new Error('Validation failed.');
+          } else {
+            console.log('Error!');
+            throw new Error('Validation failed!');
+          }
+        }
+  
+        const resData = await response.json();
+        const userData: User = resData.user;
+        dispatch(setUser(userData));
+  
+        const remainingMilliseconds = 60 * 60 * 1000;
+        const expiryDate = new Date(new Date().getTime() + remainingMilliseconds);
+        localStorage.setItem('token', resData.token);
+        localStorage.setItem('expiryDate', expiryDate.toISOString());
+      } else {
+        return;
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [dispatch, session, status, user]);
+
+  useEffect(() => {
+    signinHandler();
+  }, [signinHandler]);
+
   const onSubmitSearch = (e: FormEvent) => {
     setLoading(true);
     e.preventDefault();
     const search_query = searchValue.split(' ').join('+');
-    fetch(getYoutubeSearch + `?search_query=${search_query}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token,
-      },
-    })
-      .then((res) => {
-        return res.json();
+    if (token) {
+      fetch(getYoutubeSearch + `?search_query=${search_query}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token,
+        },
       })
-      .then((data) => {
-        const courseId = data[0].courseId;
-        Router.push(`/course/${courseId}`);
-        setLoading(false);
-      });
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          const courseId = data[0].courseId;
+          Router.push(`/course/${courseId}`);
+          setLoading(false);
+        });
+    }
   };
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -72,6 +124,9 @@ export default function Header() {
 
   const handleSignOut = () => {
     setShowAlert(true);
+    if (session) {
+      signOut({ redirect: false });
+    }
     dispatch(setUser(null));
     localStorage.removeItem('token');
     localStorage.removeItem('expiryDate');
@@ -89,6 +144,10 @@ export default function Header() {
 
     return () => clearTimeout(timer);
   }, [showAlert]);
+
+  useEffect(() => {
+    setRefreshToken((prev) => !prev);
+  }, [user]);
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -110,7 +169,7 @@ export default function Header() {
       {user && <MenuItem sx={{ pointerEvents: 'none', borderBottom: '1px solid' }}><b>{user.name}</b></MenuItem>}
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      {token ? (
+      {user ? (
         <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
       ) : (
         <MenuItem>

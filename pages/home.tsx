@@ -1,33 +1,39 @@
 import CarouselComponent, { Course } from '@/components/carousel';
 import Loader from '@/components/loader';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'react-multi-carousel/lib/styles.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import Layout from '@/layout/layout';
 import { User } from '@/types';
-import { getCourses } from '../lib/config';
+import { getCourses, loginSocial } from '../lib/config';
 
 const Home: React.FC = () => {
   const user: User | null = useSelector((state: RootState) => state.user).user;
 
-  const [courses, setCourses] = React.useState<Course[]>([]);
-  const [loading, setLoading] = React.useState<Boolean>(true);
-  const [userCourses, setUserCourses] = React.useState<Course[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState<Boolean>(true);
+  const [userCourses, setUserCourses] = useState<Course[]>([]);
 
   useEffect(() => {
-    fetch(getCourses)
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
+    const fetchData = async () => {
+      try { 
+        setLoading(true);
+        const res = await fetch(getCourses);
+        const data = await res.json();
         setCourses(data.courses);
         setLoading(false);
+  
         if (user?.courses) {
           const userCourses = data.courses.filter((course: Course) => user?.courses.includes(course._id));
           setUserCourses(userCourses);
         }
-      });
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+      }
+    };
+  
+    fetchData();
   }, [user]);
 
   return (
@@ -36,7 +42,7 @@ const Home: React.FC = () => {
         <Loader />
       ) : (
         <div className="margin-md">
-          {user?.courses && <div className="carousel-container">
+          {user?.courses && user?.courses.length > 0 && <div className="carousel-container">
             <h2 className="carousel-header">Your Courses</h2>
             <CarouselComponent data={userCourses} />
           </div>}

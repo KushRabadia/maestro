@@ -1,8 +1,12 @@
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import IconButton from '@mui/material/IconButton';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import Link from '@mui/material/Link';
+import Tooltip from '@mui/material/Tooltip';
+import { RootState } from '@/store/store';
+import { User } from '@/types';
+import { useSelector } from 'react-redux';
 import React from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -23,6 +27,7 @@ interface CarouselComponentProps {
 }
 
 const CarouselComponent: React.FC<CarouselComponentProps> = ({ data }) => {
+  const user: User | null = useSelector((state: RootState) => state.user).user;
   return (
     <div className="imageListContainer flexRowCenter">
       <Carousel
@@ -77,24 +82,30 @@ const CarouselComponent: React.FC<CarouselComponentProps> = ({ data }) => {
         {data.map((course, index) => (
           <div key={index}>
             <ImageListItem key={course._id} className="margin-sm">
-              <img
-                src={`${course.imageUrl}?fit=crop&auto=format`}
-                alt={course.title}
-                loading="lazy"
-                className="card"
-                width={400}
-                height={200}
-                style={{ width: '100%', height: '217px' }}
-              />
+              <Tooltip title={user && user.courses.includes(course._id) ? 'Continue Learning' : 'Start Learning'} arrow>
+                <Link href={`/course/${course._id}`} className="text-link">
+                  <img
+                    src={`${course.imageUrl}?fit=crop&auto=format`}
+                    alt={course.title}
+                    loading="lazy"
+                    className="card"
+                    width={400}
+                    height={200}
+                    style={{ width: '100%', height: '217px' }}
+                    />
+                </Link>
+              </Tooltip>
 
               <ImageListItemBar
                 title={course.title}
                 subtitle={course.author}
                 actionIcon={
                   <IconButton sx={{ color: 'rgba(255, 255, 255, 0.54)' }} aria-label={`info about ${course.title}`}>
-                    <Link href={`/course/${course._id}`} className="text-link">
-                      <ArrowForwardIcon />
-                    </Link>
+                    <Tooltip title={user && user.courses.includes(course._id) ? 'Continue Learning' : 'Start Learning'} arrow>
+                      <Link href={`/course/${course._id}`} className="text-link">
+                        <KeyboardArrowRightIcon />
+                      </Link>
+                    </Tooltip>
                   </IconButton>
                 }
               />
