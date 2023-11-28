@@ -1,4 +1,5 @@
 import Loader from '@/components/loader';
+import Tab from '@/components/tab';
 import Layout from '@/layout/layout';
 import CommentIcon from '@mui/icons-material/Comment';
 import Checkbox from '@mui/material/Checkbox';
@@ -12,11 +13,11 @@ import { setUser } from '@/store/actions/userActions';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { User } from '@/types';
+import { User, Course } from '@/types';
 import { useAuthToken } from '@/utils/auth';
 import React, { useEffect, useState } from 'react';
 import YouTube, { YouTubeProps } from 'react-youtube';
-import { getVideos, updateUser } from '../../lib/config';
+import { getVideos, updateUser, getCourse } from '../../lib/config';
 
 interface VideoItem {
   videoId: string;
@@ -65,7 +66,6 @@ const CheckboxList: React.FC<CheckboxListProps> = ({ data, setVideoId }) => {
     <List
       sx={{
         width: '100%',
-        maxWidth: '100%',
         maxHeight: '100px',
         bgcolor: 'background.paper',
       }}
@@ -74,9 +74,9 @@ const CheckboxList: React.FC<CheckboxListProps> = ({ data, setVideoId }) => {
         const labelId = `checkbox-list-label-${index}`;
 
         return (
-          <ListItem key={index} disablePadding className={'flexRowCenter'}>
+          <ListItem key={index} disablePadding className={'courseVideoListItem'}>
             <Grid container className={'course_listItems'}>
-              <Grid xs={2}>
+              <Grid xs={1}>
                 <ListItemButton role={undefined} onClick={handleToggle(index)} dense>
                   <ListItemIcon>
                     <Checkbox
@@ -89,16 +89,9 @@ const CheckboxList: React.FC<CheckboxListProps> = ({ data, setVideoId }) => {
                   </ListItemIcon>
                 </ListItemButton>
               </Grid>
-              <Grid xs={8}>
+              <Grid xs={11}>
                 <ListItemButton role={undefined} onClick={() => setVideoId(video.videoId)} dense>
                   <ListItemText id={labelId} primary={video.title} />
-                </ListItemButton>
-              </Grid>
-              <Grid xs={2}>
-                <ListItemButton role={undefined} onClick={handleToggle(index)} dense>
-                  <ListItemIcon>
-                    <CommentIcon />
-                  </ListItemIcon>
                 </ListItemButton>
               </Grid>
             </Grid>
@@ -109,13 +102,16 @@ const CheckboxList: React.FC<CheckboxListProps> = ({ data, setVideoId }) => {
   );
 };
 
-const Course: React.FC = () => {
+const CoursePage: React.FC = () => {
   const dispatch = useDispatch();
   const user: User | null = useSelector((state: RootState) => state.user).user;
   const [data, setData] = useState([]);
+  const [course, setCourse] = useState<Course>();
   const [videoId, setVideoId] = useState('');
   const [loading, setLoading] = useState<Boolean>(true);
   const router = useRouter();
+  const labels = ['Description', 'Q&A', 'Notes'];
+  const [labelItems, setLabelitems] = useState<string[]>([]); 
   const [refreshToken, setRefreshToken] = useState<boolean>(false);
   const { token } = useAuthToken({refresh: refreshToken});
   const courseId: string = Array.isArray(router.query.id) ? router.query.id[0] : (router.query.id || '');
@@ -144,7 +140,32 @@ const Course: React.FC = () => {
       }
     };
 
-    if (courseId !== '') fetchData();
+    const fetchCourse = async () => {
+      try {
+        const response = await fetch(`${getCourse}${courseId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        const course: Course = data.course;
+        setCourse(course);
+        setLabelitems([course.description]);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    if (courseId !== '') {
+      fetchData();
+      fetchCourse();
+    }
   }, [courseId]);
 
   useEffect(() => {
@@ -184,10 +205,11 @@ const Course: React.FC = () => {
         <Loader />
       ) : (
         <Grid container>
-          <Grid xs={10}>
+          <Grid xs={9}>
             <MediaCard videoId={videoId} />
+              <Tab labels={labels} labelItems={labelItems}/>
           </Grid>
-          <Grid xs={2}>
+          <Grid xs={3} className={'courseVideoList'}>
             <CheckboxList data={data} setVideoId={setVideoId} />
           </Grid>
         </Grid>
@@ -196,4 +218,4 @@ const Course: React.FC = () => {
   );
 };
 
-export default Course;
+export default CoursePage;

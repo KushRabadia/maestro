@@ -51,6 +51,17 @@ img {
   justify-content: center;
 }
 
+.courseVideoList {
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+}
+
+.courseVideoListItem {
+  display: flex;
+  align-items: stretch;
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
+
 .imageListContainer {
   overflow: hidden;
   transition: transform 5s ease;
@@ -123,7 +134,7 @@ img {
 .course_listItems {
   text-align: center;
   padding: 5px;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 .loader_circle {
