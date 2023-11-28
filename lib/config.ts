@@ -18,6 +18,7 @@ export const getUserDetails: string = `${serverPath}${userPath}/details`;
 
 export const createCourse: string = `${serverPath}${coursePath}`;
 export const getCourses: string = `${serverPath}${coursePath}/courses`;
+export const getCourse: string = `${serverPath}${coursePath}/`;
 
 export const getYoutubeLink: string = `${serverPath}${youtubePath}/link`;
 export const getYoutubeSearch: string = `${serverPath}${youtubePath}/search`;
