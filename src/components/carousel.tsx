@@ -5,22 +5,12 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import Link from '@mui/material/Link';
 import Tooltip from '@mui/material/Tooltip';
 import { RootState } from '@/store/store';
-import { User } from '@/types';
+import { User, Course } from '@/types';
 import { useSelector } from 'react-redux';
 import React from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import Image from 'next/image';
-
-export interface Course {
-  _id: string;
-  imageUrl: string;
-  title: string;
-  author: string;
-  playlistId: string;
-  description: string;
-  featured?: boolean;
-}
 
 interface CarouselComponentProps {
   data: Course[];

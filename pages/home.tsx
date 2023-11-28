@@ -1,11 +1,11 @@
-import CarouselComponent, { Course } from '@/components/carousel';
+import CarouselComponent from '@/components/carousel';
 import Loader from '@/components/loader';
 import React, { useEffect, useState } from 'react';
 import 'react-multi-carousel/lib/styles.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import Layout from '@/layout/layout';
-import { User } from '@/types';
+import { User, Course } from '@/types';
 import { getCourses, loginSocial } from '../lib/config';
 
 const Home: React.FC = () => {
